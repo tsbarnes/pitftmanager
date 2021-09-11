@@ -12,9 +12,6 @@ from apps import AbstractApp
 class App(AbstractApp):
     framebuffer: Framebuffer = None
 
-    def __init__(self, fb):
-        self.framebuffer = fb
-
     def run_once(self):
         image = Image.new("RGBA", self.framebuffer.size, "black")
         draw = ImageDraw.Draw(image)

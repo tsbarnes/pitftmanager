@@ -2,9 +2,15 @@ import logging
 import pathlib
 import os
 import inspect
+from framebuffer import Framebuffer
 
 
 class AbstractApp:
+    framebuffer: Framebuffer = None
+
+    def __init__(self, fb):
+        self.framebuffer = fb
+
     def reload(self):
         pass
 
