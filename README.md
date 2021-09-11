@@ -27,3 +27,23 @@ which should inherit from the `apps.AbstractApp` class. Then you just need to im
 the `run_iteration` method and have it do whatever you want the app to do!
 
 More documentation for development coming soon.
+
+## Installation
+
+* First, clone the repository onto the Raspberry Pi, I recommend cloning it to `/home/pi/pitftmanager` and then change directory into it.
+* Second, install the required Python libraries.
+* Third, link the `pitftmanager.service` file into `/etc/systemd/system`.
+* Fourth, enable the `systemd` service.
+* Lastly, start the `systemd` service, or reboot.
+
+Quick command list to install:
+
+```shell
+git clone https://github.com/tsbarnes/pitftmanager.git ~/pitftmanager
+cd ~/pitftmanager
+sudo pip3 install -r requirements.txt
+sudo ln -s /home/pi/pitftmanager/pitftmanager.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable pitftmanager
+sudo systemctl start pitftmanager
+```
