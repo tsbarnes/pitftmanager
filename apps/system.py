@@ -38,12 +38,12 @@ class App(AbstractApp):
         uptime = datetime.timedelta(seconds=time.clock_gettime(time.CLOCK_BOOTTIME))
         text += 'Uptime:  ' + humanize.naturaldelta(uptime)
 
-        draw.text((5, 55), text, font=font, fill="white")
+        draw.text((5, 90), text, font=font, fill="white")
 
         logo = Image.open('raspberry-pi.png')
-        logo.thumbnail((50, 50))
-        centered_position = round(self.framebuffer.size[0] / 2 - 25)
-        box = (centered_position, 0)
+        logo.thumbnail((80, 80))
+        centered_position = round(self.framebuffer.size[0] / 2 - 40)
+        box = (centered_position, 5)
 
         try:
             image.paste(logo, box)
