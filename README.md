@@ -13,11 +13,12 @@ The Adafruit PiTFT 3.5" is what I'm developing it on/for, so I chose to referenc
 
 ## What apps come with it?
 
-Right now, there are two included apps:
+Right now, there are three included apps:
 
 * `system` - displays system information
 * `fortune` - displays fortune cookies
   * Note: requires `fortune-mod` to be installed!
+* `affirmations` - displays positive affirmations
 
 ## Creating apps
 

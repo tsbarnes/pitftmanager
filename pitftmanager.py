@@ -74,9 +74,13 @@ class PiTFTManager:
                     self.next_app()
                 elif command == "switch_app":
                     self.switch_app(args)
+                elif command == "reload":
+                    self.current_app.reload()
                 elif command == "exit":
                     logging.info("Got 'exit' command, quitting...")
                     sys.exit(0)
+                else:
+                    logging.warning("Unrecognized command: " + command)
 
             self.current_app.run_iteration()
             time.sleep(1)

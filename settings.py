@@ -20,3 +20,14 @@ try:
     from local_settings import APPS
 except ImportError:
     APPS = get_apps()
+
+try:
+    from local_settings import AFFIRMATIONS
+except ImportError:
+    AFFIRMATIONS = [
+        "You can do it!",
+        "You are safe.",
+        "You'll be okay.",
+        "Things will get better.",
+        "The past can't hurt you anymore.",
+    ]
