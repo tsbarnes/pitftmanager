@@ -92,7 +92,8 @@ if __name__ == '__main__':
     logging.basicConfig(level=settings.LOGLEVEL)
 
     app = PiTFTManager()
-    image = wrapped_text("Starting PiTFT Manager...", app.framebuffer.size, font_size=40, background_color="black")
+    image = wrapped_text("Starting PiTFT Manager...", app.framebuffer.size,
+                         font_name=settings.FONT, font_size=40, background_color="black")
     app.framebuffer.show(image)
 
     app.main_loop()
