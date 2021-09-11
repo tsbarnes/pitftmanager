@@ -3,6 +3,7 @@ import platform
 import time
 import humanize
 import logging
+import settings
 from framebuffer import Framebuffer
 from PIL import Image, ImageDraw, ImageFont
 from apps import AbstractApp
@@ -17,7 +18,7 @@ class App(AbstractApp):
     def run_once(self):
         image = Image.new("RGBA", self.framebuffer.size, "black")
         draw = ImageDraw.Draw(image)
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 20)
+        font = ImageFont.truetype(settings.MONOSPACE_FONT, 25)
 
         text = ''
 
