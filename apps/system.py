@@ -2,6 +2,7 @@ import datetime
 import platform
 import time
 import humanize
+import logging
 from framebuffer import Framebuffer
 from PIL import Image, ImageDraw, ImageFont
 from apps import AbstractApp
@@ -40,6 +41,12 @@ class App(AbstractApp):
 
         logo = Image.open('raspberry-pi.png')
         logo.thumbnail((50, 50))
-        image.paste(logo)
+        centered_position = round(self.framebuffer.size[0] / 2 - 25)
+        box = (centered_position, 0)
+
+        try:
+            image.paste(logo, box)
+        except ValueError:
+            logging.error("Failed to paste image")
 
         self.framebuffer.show(image)
