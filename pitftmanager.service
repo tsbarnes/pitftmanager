@@ -4,7 +4,7 @@ After=local-fs.target network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/pi/pitftmanager/app.py
+ExecStart=/usr/bin/python3 /home/pi/pitftmanager/pitftmanager.py
 User=pi
 Restart=always
 
