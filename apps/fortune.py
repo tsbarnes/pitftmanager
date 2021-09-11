@@ -15,7 +15,7 @@ class App(AbstractApp):
 
     def reload(self):
         try:
-            child = subprocess.Popen(['/usr/games/fortune'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            child = subprocess.Popen(['/usr/games/fortune', '-a'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             self.output = child.stdout.read().decode().replace('\n', ' ')
         except OSError:
             logging.error("couldn't run application 'fortune'")
