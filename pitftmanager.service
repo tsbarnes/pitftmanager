@@ -1,0 +1,13 @@
+[Unit]
+Description=PiTFT Manager
+After=local-fs.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/pitftmanager/app.py
+User=pi
+Restart=always
+
+[Install]
+WantedBy=default.target
+
