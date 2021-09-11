@@ -1,6 +1,5 @@
 import random
 import settings
-from PIL import Image
 from apps import AbstractApp
 from utils import wrapped_text
 
@@ -8,7 +7,6 @@ from utils import wrapped_text
 class App(AbstractApp):
     affirmations: list = settings.AFFIRMATIONS
     current_affirmation: str = affirmations[0]
-    image: Image = None
 
     def get_random_affirmation(self):
         affirmation = random.choice(self.affirmations)
@@ -24,4 +22,4 @@ class App(AbstractApp):
     def run_iteration(self):
         if not self.image:
             self.reload()
-        self.framebuffer.show(self.image)
+        self.show()

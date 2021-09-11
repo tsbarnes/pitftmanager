@@ -9,9 +9,9 @@ from apps import AbstractApp
 
 
 class App(AbstractApp):
-    def run_iteration(self):
-        image = Image.new("RGBA", self.framebuffer.size, "black")
-        draw = ImageDraw.Draw(image)
+    def reload(self):
+        self.blank()
+        draw = ImageDraw.Draw(self.image)
         font = ImageFont.truetype(settings.MONOSPACE_FONT, 25)
 
         text = ''
@@ -40,8 +40,11 @@ class App(AbstractApp):
         box = (centered_position, 5)
 
         try:
-            image.paste(logo, box)
+            self.image.paste(logo, box)
         except ValueError:
             logging.error("Failed to paste image")
 
-        self.framebuffer.show(image)
+    def run_iteration(self):
+        if not self.image:
+            self.reload()
+        self.show()
