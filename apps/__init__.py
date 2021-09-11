@@ -14,7 +14,7 @@ class AbstractApp:
     def reload(self):
         pass
 
-    def run_once(self):
+    def run_iteration(self):
         raise NotImplementedError()
 
 

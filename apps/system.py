@@ -4,15 +4,12 @@ import time
 import humanize
 import logging
 import settings
-from framebuffer import Framebuffer
 from PIL import Image, ImageDraw, ImageFont
 from apps import AbstractApp
 
 
 class App(AbstractApp):
-    framebuffer: Framebuffer = None
-
-    def run_once(self):
+    def run_iteration(self):
         image = Image.new("RGBA", self.framebuffer.size, "black")
         draw = ImageDraw.Draw(image)
         font = ImageFont.truetype(settings.MONOSPACE_FONT, 25)

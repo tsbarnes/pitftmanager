@@ -7,7 +7,7 @@ from types import ModuleType
 import settings
 from utils import wrapped_text
 from framebuffer import Framebuffer
-from apps import AbstractApp, get_apps
+from apps import AbstractApp
 
 
 class PiTFTManager:
@@ -18,7 +18,6 @@ class PiTFTManager:
     current_app: AbstractApp = None
 
     def __init__(self):
-        logging.basicConfig(level=settings.LOGLEVEL)
         app_names = settings.APPS
         for name in app_names:
             try:
@@ -43,11 +42,14 @@ class PiTFTManager:
 
     def main_loop(self):
         while True:
-            self.current_app.run_once()
+            self.current_app.run_iteration()
             time.sleep(1)
 
 
 if __name__ == '__main__':
+    print("Starting PiTFT Manager...")
+    print("Log Level: " + logging.getLevelName(settings.LOGLEVEL))
+    logging.basicConfig(level=settings.LOGLEVEL)
     app = PiTFTManager()
     image = wrapped_text("Starting PiTFT Manager...", app.framebuffer.size, font_size=40, background_color="black")
     app.framebuffer.show(image)
