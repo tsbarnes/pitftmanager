@@ -6,6 +6,7 @@ from utils import wrapped_text
 
 class App(AbstractApp):
     output: str = ''
+    reload_interval: int = 600
 
     def reload(self):
         try:

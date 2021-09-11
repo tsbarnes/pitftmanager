@@ -43,8 +43,3 @@ class App(AbstractApp):
             self.image.paste(logo, box)
         except ValueError:
             logging.error("Failed to paste image")
-
-    def run_iteration(self):
-        if not self.image:
-            self.reload()
-        self.show()
