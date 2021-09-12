@@ -47,3 +47,18 @@ try:
     from local_settings import TIMEZONE
 except ImportError:
     TIMEZONE = datetime.now().astimezone().tzinfo
+
+try:
+    from local_settings import BACKGROUND
+except ImportError:
+    BACKGROUND = None
+
+try:
+    from local_settings import TEXT_COLOR
+except ImportError:
+    TEXT_COLOR = "white"
+
+try:
+    from local_settings import BACKGROUND_COLOR
+except ImportError:
+    BACKGROUND_COLOR = "black"

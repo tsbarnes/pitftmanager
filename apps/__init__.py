@@ -2,10 +2,12 @@ import logging
 import pathlib
 import os
 import inspect
+import textwrap
 from pathlib import Path
+from string import ascii_letters
 from typing import Generator
-
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
+import settings
 from framebuffer import Framebuffer
 
 
@@ -17,13 +19,34 @@ class AbstractApp:
 
     def __init__(self, fb):
         self.framebuffer = fb
-        self.image = Image.new("RGBA", self.framebuffer.size, 0)
+        self.blank()
         self.reload()
 
     def blank(self):
-        self.image = Image.new("RGBA", self.framebuffer.size, 0)
+        self.image = Image.new("RGBA", self.framebuffer.size, settings.BACKGROUND_COLOR)
+
+    def wrapped_text(self, text, position=(5, 5), font_name=None, font_size=20, color=None):
+        self.blank()
+        if not font_name:
+            font_name = settings.FONT
+        if not color:
+            color = settings.TEXT_COLOR
+
+        font: ImageFont = ImageFont.truetype(font_name, font_size)
+        draw: ImageDraw = ImageDraw.Draw(self.image)
+
+        avg_char_width: int = sum(font.getsize(char)[0] for char in ascii_letters) / len(ascii_letters)
+        max_char_count: int = int((self.image.size[0] * .95) / avg_char_width)
+
+        scaled_wrapped_text: str = ''
+        for line in text.split('\n'):
+            scaled_wrapped_text += textwrap.fill(text=line, width=max_char_count) + '\n'
+        draw.text(position, scaled_wrapped_text, font=font, fill=color)
 
     def show(self):
+        if not self.image:
+            logging.error("App '{0}' called 'show' without an image!".format(self.__module__))
+            self.blank()
         self.framebuffer.show(self.image)
 
     def reload(self):

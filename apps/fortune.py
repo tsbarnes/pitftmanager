@@ -1,7 +1,6 @@
 import subprocess
 import logging
 from apps import AbstractApp
-from utils import wrapped_text
 
 
 class App(AbstractApp):
@@ -15,4 +14,4 @@ class App(AbstractApp):
         except OSError:
             logging.error("couldn't run application 'fortune'")
             self.output = ''
-        self.image = wrapped_text(self.output, self.framebuffer.size, font_size=16)
+        self.wrapped_text(self.output, (5, 5), font_size=16)

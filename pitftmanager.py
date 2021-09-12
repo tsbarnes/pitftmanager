@@ -5,7 +5,6 @@ import sys
 from types import ModuleType
 import posix_ipc
 import settings
-from utils import wrapped_text
 from framebuffer import Framebuffer
 from apps import AbstractApp
 
@@ -34,6 +33,8 @@ class PiTFTManager:
             self.apps.append(module.App(self.framebuffer))
 
         self.switch_app(0)
+
+        logging.info("PiTFT Size: {0}x{1}".format(self.framebuffer.size[0], self.framebuffer.size[1]))
 
     def load_app(self, name):
         try:
@@ -103,8 +104,8 @@ if __name__ == '__main__':
     logging.basicConfig(level=settings.LOGLEVEL)
 
     app = PiTFTManager()
-    image = wrapped_text("Starting PiTFT Manager...", app.framebuffer.size,
-                         font_name=settings.FONT, font_size=40, background_color="black")
-    app.framebuffer.show(image)
+    # image = wrapped_text("Starting PiTFT Manager...", app.framebuffer.size,
+    #                      font_name=settings.FONT, font_size=40, background_color="black")
+    # app.framebuffer.show(image)
 
     app.main_loop()

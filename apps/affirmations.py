@@ -1,7 +1,6 @@
 import random
 import settings
 from apps import AbstractApp
-from utils import wrapped_text
 
 
 class App(AbstractApp):
@@ -18,4 +17,4 @@ class App(AbstractApp):
 
     def reload(self):
         self.current_affirmation = self.get_random_affirmation()
-        self.image = wrapped_text(self.current_affirmation, self.framebuffer.size, font_size=40)
+        self.wrapped_text(self.current_affirmation, (5, 5), font_size=40)

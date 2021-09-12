@@ -32,7 +32,7 @@ class App(AbstractApp):
         uptime = datetime.timedelta(seconds=time.clock_gettime(time.CLOCK_BOOTTIME))
         text += 'Uptime:  ' + humanize.naturaldelta(uptime)
 
-        draw.text((5, 90), text, font=font, fill="white")
+        draw.text((5, 90), text, font=font, fill=settings.TEXT_COLOR)
 
         logo = Image.open('raspberry-pi.png')
         logo.thumbnail((80, 80))

@@ -6,7 +6,6 @@ from datetime import date, datetime, timedelta, tzinfo
 from icalevents.icalevents import events
 from settings import CALENDAR_URLS, TIMEZONE, CALENDAR_REFRESH
 from apps import AbstractApp
-from utils import wrapped_text
 
 
 def sort_by_date(obj):
@@ -112,10 +111,12 @@ class App(AbstractApp):
     def reload(self):
         text = self.calendar.as_string()
 
+        self.blank()
+
         if text != '':
-            self.image = wrapped_text(text, self.framebuffer.size, font_size=20)
+            self.wrapped_text(text, (5, 5), font_size=20)
         else:
-            self.image = wrapped_text('No current events', self.framebuffer.size, font_size=25)
+            self.wrapped_text('No current events', (5, 5), font_size=25)
 
     def run_iteration(self):
         self.calendar.refresh_interval -= 1
