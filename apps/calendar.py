@@ -8,14 +8,16 @@ from settings import CALENDAR_URLS, TIMEZONE, CALENDAR_REFRESH
 from apps import AbstractApp
 
 
-def sort_by_date(obj):
+def sort_by_date(obj: dict):
+    if isinstance(obj["start"], date) and not isinstance(obj["start"], datetime):
+        return datetime.combine(obj["start"], datetime.min.time())
     return obj["start"]
 
 
 class Calendar:
-    timezone = None
-    refresh_interval = 0
-    events = []
+    timezone: tzinfo = None
+    refresh_interval: int = 0
+    events: list = []
 
     def __init__(self):
         if isinstance(TIMEZONE, tzinfo):
@@ -34,9 +36,9 @@ class Calendar:
 
     def get_events_from_webcal(self, url):
         try:
-            timeline = events(url)
+            timeline: list = events(url)
             for event in timeline:
-                start = self.standardize_date(event.start)
+                start = event.start
                 summary = event.summary
 
                 self.events.append({

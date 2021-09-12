@@ -24,8 +24,8 @@ class AbstractApp:
 
     def blank(self):
         if settings.BACKGROUND:
-            self.image = Image.open(settings.BACKGROUND)
-            self.image.resize(self.framebuffer.size)
+            image: Image = Image.open(settings.BACKGROUND)
+            self.image = image.resize(self.framebuffer.size)
         else:
             self.image = Image.new("RGBA", self.framebuffer.size, settings.BACKGROUND_COLOR)
 

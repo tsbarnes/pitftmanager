@@ -47,7 +47,20 @@ class PiTFTManager:
             except ImportError:
                 logging.error("Couldn't load app '{0}'" % name)
 
-    def switch_app(self, index):
+    def switch_app(self, index: int):
+        self.current_app_index = index % len(self.apps)
+        self.current_app_module = self.app_modules[self.current_app_index]
+        self.current_app = self.apps[self.current_app_index]
+
+    def switch_app_by_name(self, name: str):
+        index = 0
+        for app in self.apps:
+            if app.__module__ == name:
+                break
+            if app.__module__ == "apps." + name:
+                break
+            index += 1
+
         self.current_app_index = index % len(self.apps)
         self.current_app_module = self.app_modules[self.current_app_index]
         self.current_app = self.apps[self.current_app_index]
@@ -77,7 +90,7 @@ class PiTFTManager:
                 elif command == "next":
                     self.next_app()
                 elif command == "switch_app":
-                    self.switch_app(args)
+                    self.switch_app_by_name(args)
                 elif command == "reload":
                     self.current_app.reload()
                 elif command == "exit":
@@ -104,6 +117,8 @@ if __name__ == '__main__':
     logging.basicConfig(level=settings.LOGLEVEL)
 
     app = PiTFTManager()
+
+    app.framebuffer.blank()
     # image = wrapped_text("Starting PiTFT Manager...", app.framebuffer.size,
     #                      font_name=settings.FONT, font_size=40, background_color="black")
     # app.framebuffer.show(image)
