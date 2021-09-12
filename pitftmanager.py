@@ -24,15 +24,7 @@ class PiTFTManager:
 
         app_names = settings.APPS
         for name in app_names:
-            try:
-                module = importlib.import_module(name)
-                self.app_modules.append(module)
-            except ImportError:
-                try:
-                    module = importlib.import_module("apps." + name)
-                    self.app_modules.append(module)
-                except ImportError:
-                    logging.error("Couldn't load app '{0}'" % name)
+            self.load_app(name)
 
         if len(self.app_modules) < 1:
             logging.error("No apps found, exiting...")
@@ -42,6 +34,17 @@ class PiTFTManager:
             self.apps.append(module.App(self.framebuffer))
 
         self.switch_app(0)
+
+    def load_app(self, name):
+        try:
+            module = importlib.import_module(name)
+            self.app_modules.append(module)
+        except ImportError:
+            try:
+                module = importlib.import_module("apps." + name)
+                self.app_modules.append(module)
+            except ImportError:
+                logging.error("Couldn't load app '{0}'" % name)
 
     def switch_app(self, index):
         self.current_app_index = index % len(self.apps)
@@ -79,6 +82,12 @@ class PiTFTManager:
                 elif command == "exit":
                     logging.info("Got 'exit' command, quitting...")
                     sys.exit(0)
+                elif command == "load_app":
+                    logging.info("Loading app '{0}'...".format(parts[1]))
+                    self.load_app(parts[1])
+                elif command == "remove_app":
+                    logging.info("Removing app '{0}'...".format(parts[1]))
+                    raise NotImplementedError()
                 else:
                     logging.warning("Unrecognized command: " + command)
 
