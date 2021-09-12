@@ -23,7 +23,11 @@ class AbstractApp:
         self.reload()
 
     def blank(self):
-        self.image = Image.new("RGBA", self.framebuffer.size, settings.BACKGROUND_COLOR)
+        if settings.BACKGROUND:
+            self.image = Image.open(settings.BACKGROUND)
+            self.image.resize(self.framebuffer.size)
+        else:
+            self.image = Image.new("RGBA", self.framebuffer.size, settings.BACKGROUND_COLOR)
 
     def wrapped_text(self, text, position=(5, 5), font_name=None, font_size=20, color=None):
         self.blank()
