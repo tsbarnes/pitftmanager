@@ -91,7 +91,9 @@ class PiTFTManager:
                 else:
                     logging.warning("Unrecognized command: " + command)
 
-            self.current_app.run_iteration()
+            for app in self.apps:
+                app.run_iteration()
+            self.current_app.show()
             time.sleep(1)
 
 

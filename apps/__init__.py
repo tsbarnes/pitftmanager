@@ -37,7 +37,6 @@ class AbstractApp:
                     type(self).__module__, self.reload_interval))
             self.reload_wait = 0
             self.reload()
-        self.show()
 
 
 def get_apps():
