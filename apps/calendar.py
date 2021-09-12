@@ -115,7 +115,7 @@ class App(AbstractApp):
         if text != '':
             self.image = wrapped_text(text, self.framebuffer.size, font_size=16)
         else:
-            self.image = wrapped_text('No current\nevents', self.framebuffer.size, font_size=25)
+            self.image = wrapped_text('No current events', self.framebuffer.size, font_size=25)
 
     def run_iteration(self):
         self.calendar.refresh_interval -= 1

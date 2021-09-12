@@ -12,8 +12,9 @@ def wrapped_text(text, image_size, font_name=settings.FONT, font_size=20, color=
     avg_char_width = sum(font.getsize(char)[0] for char in ascii_letters) / len(ascii_letters)
     max_char_count = int((image.size[0] * .95) / avg_char_width)
 
-    scaled_wrapped_text = textwrap.fill(text=text, width=max_char_count,
-                                        replace_whitespace=False, drop_whitespace=False)
+    scaled_wrapped_text = ''
+    for line in text.split('\n'):
+        scaled_wrapped_text += textwrap.fill(text=line, width=max_char_count) + '\n'
     draw.text((5, 5), scaled_wrapped_text, font=font, fill=color)
 
     return image
