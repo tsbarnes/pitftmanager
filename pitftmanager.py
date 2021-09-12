@@ -61,6 +61,10 @@ class PiTFTManager:
                 break
             index += 1
 
+        if index >= len(self.apps):
+            logging.error("App '{0}' not found")
+            return
+
         self.current_app_index = index % len(self.apps)
         self.current_app_module = self.app_modules[self.current_app_index]
         self.current_app = self.apps[self.current_app_index]
