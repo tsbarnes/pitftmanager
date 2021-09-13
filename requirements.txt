@@ -8,3 +8,4 @@ icalevents~=0.1.25
 PyGObject~=3.30.4
 requests~=2.21.0
 distro~=1.6.0
+python_weather~=0.3.6

@@ -1,4 +1,5 @@
 import logging
+import python_weather
 from datetime import datetime
 from apps import get_apps
 
@@ -62,3 +63,14 @@ try:
     from local_settings import BACKGROUND_COLOR
 except ImportError:
     BACKGROUND_COLOR = "black"
+
+
+try:
+    from local_settings import WEATHER_FORMAT
+except ImportError:
+    WEATHER_FORMAT = python_weather.IMPERIAL
+
+try:
+    from local_settings import WEATHER_CITY
+except ImportError:
+    WEATHER_CITY = "Richmond, VA"
