@@ -30,11 +30,12 @@ class AbstractApp:
             self.image = Image.new("RGBA", self.framebuffer.size, settings.BACKGROUND_COLOR)
 
     def wrapped_text(self, text, position=(5, 5), font_name=None, font_size=20, color=None):
-        self.blank()
         if not font_name:
             font_name = settings.FONT
         if not color:
             color = settings.TEXT_COLOR
+        if not self.image:
+            raise ValueError("self.image is None")
 
         font: ImageFont = ImageFont.truetype(font_name, font_size)
         draw: ImageDraw = ImageDraw.Draw(self.image)

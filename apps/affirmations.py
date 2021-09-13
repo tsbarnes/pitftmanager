@@ -16,5 +16,6 @@ class App(AbstractApp):
         return affirmation
 
     def reload(self):
+        self.blank()
         self.current_affirmation = self.get_random_affirmation()
         self.wrapped_text(self.current_affirmation, (5, 5), font_size=40)
