@@ -4,6 +4,7 @@ import time
 import humanize
 import logging
 import settings
+import distro
 from PIL import Image, ImageDraw, ImageFont
 from apps import AbstractApp
 
@@ -22,7 +23,7 @@ class App(AbstractApp):
 
         text += 'System:  ' + platform.system() + '\n'
 
-        dist: str = " ".join(x for x in platform.dist())
+        dist = "{0} {1}".format(distro.name(), distro.version())
         text += 'OS:      ' + dist + '\n'
 
         text += 'Machine: ' + platform.machine() + '\n'
