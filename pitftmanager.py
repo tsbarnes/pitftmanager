@@ -7,6 +7,7 @@ import posix_ipc
 import settings
 from framebuffer import Framebuffer
 from apps import AbstractApp
+from libs.calendar import Calendar, get_calendar
 
 
 class PiTFTManager:
@@ -16,6 +17,7 @@ class PiTFTManager:
     current_app_index: int = 0
     current_app_module: ModuleType = None
     current_app: AbstractApp = None
+    calendar: Calendar = get_calendar()
 
     def __init__(self):
         self.mq = posix_ipc.MessageQueue("/pitftmanager_ipc", flags=posix_ipc.O_CREAT)
@@ -35,6 +37,8 @@ class PiTFTManager:
         self.switch_app(0)
 
         logging.info("PiTFT Size: {0}x{1}".format(self.framebuffer.size[0], self.framebuffer.size[1]))
+
+        self.calendar.get_latest_events()
 
     def load_app(self, name):
         try:
@@ -108,6 +112,11 @@ class PiTFTManager:
                     raise NotImplementedError()
                 else:
                     logging.warning("Unrecognized command: " + command)
+
+            self.calendar.refresh_interval -= 1
+            if self.calendar.refresh_interval <= 0:
+                self.calendar.refresh_interval = settings.CALENDAR_REFRESH
+                self.calendar.get_latest_events()
 
             for app in self.apps:
                 app.run_iteration()
