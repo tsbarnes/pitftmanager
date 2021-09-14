@@ -46,4 +46,4 @@ class App(AbstractApp):
             logging.error("Failed to paste image")
 
     def touch(self, event: dict):
-        pass
+        logging.debug("System app received touch: {}".format(event))
