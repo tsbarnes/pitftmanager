@@ -125,7 +125,8 @@ class PiTFTManager:
                         self.touch_x = event['x']
                         self.touch_y = event['y']
                     elif event['touch'] == 0:
-                        self.current_app.touch(get_pixels_from_coordinates((self.touch_x, self.touch_y)))
+                        position = get_pixels_from_coordinates(self.framebuffer, (self.touch_x, self.touch_y))
+                        self.current_app.touch(position)
                         self.touch_x = 0
                         self.touch_y = 0
 

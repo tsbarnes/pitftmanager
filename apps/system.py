@@ -46,12 +46,12 @@ class App(AbstractApp):
             logging.error("Failed to paste image")
 
     def touch(self, position: tuple):
-        if position[0] < 50:
-            logging.debug("Top of screen touched")
-        if position[0] > 230:
-            logging.debug("Bottom of screen touched")
         if position[1] < 50:
+            logging.debug("Top of screen touched")
+        if position[1] > self.framebuffer.size[1] - 50:
+            logging.debug("Bottom of screen touched")
+        if position[0] < 50:
             logging.debug("Left of screen touched")
-        if position[1] > 230:
+        if position[0] > self.framebuffer.size[0] - 50:
             logging.debug("Right of screen touched")
         logging.debug("System app caught touch: {}".format(position))
