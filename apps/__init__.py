@@ -57,6 +57,9 @@ class AbstractApp:
     def reload(self):
         raise NotImplementedError()
 
+    def touch(self, event: dict):
+        logging.debug("Unhandled PiTFT touch event: {}".format(event))
+
     def run_iteration(self):
         self.reload_wait += 1
         if not self.image or self.reload_wait >= self.reload_interval:

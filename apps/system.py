@@ -44,3 +44,6 @@ class App(AbstractApp):
             self.image.paste(logo, box)
         except ValueError:
             logging.error("Failed to paste image")
+
+    def touch(self, event: dict):
+        pass

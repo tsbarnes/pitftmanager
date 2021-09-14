@@ -119,7 +119,7 @@ class PiTFTManager:
 
             while not self.pitft_touchscreen.queue_empty():
                 for event in self.pitft_touchscreen.get_event():
-                    logging.debug("PiTFT Event: {}".format(event))
+                    self.current_app.touch(event)
 
             self.calendar.refresh_interval -= 1
             if self.calendar.refresh_interval <= 0:
