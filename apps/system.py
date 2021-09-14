@@ -45,5 +45,13 @@ class App(AbstractApp):
         except ValueError:
             logging.error("Failed to paste image")
 
-    def touch(self, event: dict):
-        logging.debug("System app received touch: {}".format(event))
+    def touch(self, position: tuple):
+        if position[0] < 50:
+            logging.debug("Top of screen touched")
+        if position[0] > 230:
+            logging.debug("Bottom of screen touched")
+        if position[1] < 50:
+            logging.debug("Left of screen touched")
+        if position[1] > 230:
+            logging.debug("Right of screen touched")
+        logging.debug("System app caught touch: {}".format(position))

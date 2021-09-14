@@ -111,3 +111,22 @@ class pitft_touchscreen(threading.Thread):
 
     def __del__(self):
         self.shutdown.set()
+
+
+# Here we convert the evdev "hardware" touch coordinates into pygame surface pixel coordinates
+def get_pixels_from_coordinates(coords):
+    surface_size = (320, 240)
+    tft_orig = (3750, 180)
+    tft_end = (150, 3750)
+    tft_delta = (tft_end[0] - tft_orig[0], tft_end[1] - tft_orig[1])
+    tft_abs_delta = (abs(tft_end[0] - tft_orig[0]), abs(tft_end[1] - tft_orig[1]))
+
+    if tft_delta [0] < 0:
+        x = float(tft_abs_delta [0] - coords [0] + tft_end [0]) / float(tft_abs_delta [0]) * float(surface_size [0])
+    else:
+        x = float(coords [0] - tft_orig [0]) / float(tft_abs_delta [0]) * float(surface_size [0])
+    if tft_delta [1] < 0:
+        y = float(tft_abs_delta [1] - coords [1] + tft_end [1]) / float(tft_abs_delta [1]) * float(surface_size [1])
+    else:
+        y = float(coords [1] - tft_orig [1]) / float(tft_abs_delta [1]) * float(surface_size [1])
+    return int(x), int(y)

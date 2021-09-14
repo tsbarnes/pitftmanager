@@ -57,8 +57,8 @@ class AbstractApp:
     def reload(self):
         raise NotImplementedError()
 
-    def touch(self, event: dict):
-        logging.debug("Unhandled PiTFT touch event: {}".format(event))
+    def touch(self, position: tuple):
+        logging.debug("Unhandled PiTFT touch event: {}".format(position))
 
     def run_iteration(self):
         self.reload_wait += 1

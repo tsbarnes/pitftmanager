@@ -8,7 +8,7 @@ import settings
 from framebuffer import Framebuffer
 from apps import AbstractApp
 from libs.calendar import Calendar, get_calendar
-from pitft_touchscreen import pitft_touchscreen
+from pitft_touchscreen import pitft_touchscreen, get_pixels_from_coordinates
 
 
 class PiTFTManager:
@@ -20,6 +20,8 @@ class PiTFTManager:
     current_app: AbstractApp = None
     calendar: Calendar = get_calendar()
     pitft_touchscreen = pitft_touchscreen()
+    touch_x: int = 0
+    touch_y: int = 0
 
     def __init__(self):
         self.mq = posix_ipc.MessageQueue("/pitftmanager_ipc", flags=posix_ipc.O_CREAT)
@@ -119,7 +121,13 @@ class PiTFTManager:
 
             while not self.pitft_touchscreen.queue_empty():
                 for event in self.pitft_touchscreen.get_event():
-                    self.current_app.touch(event)
+                    if event['touch'] == 1 and self.touch_x == 0:
+                        self.touch_x = event['x']
+                        self.touch_y = event['y']
+                    elif event['touch'] == 0:
+                        self.current_app.touch(get_pixels_from_coordinates((self.touch_x, self.touch_y)))
+                        self.touch_x = 0
+                        self.touch_y = 0
 
             self.calendar.refresh_interval -= 1
             if self.calendar.refresh_interval <= 0:
