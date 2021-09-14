@@ -8,6 +8,7 @@ import settings
 from framebuffer import Framebuffer
 from apps import AbstractApp
 from libs.calendar import Calendar, get_calendar
+from pitft_touchscreen import pitft_touchscreen
 
 
 class PiTFTManager:
@@ -18,10 +19,13 @@ class PiTFTManager:
     current_app_module: ModuleType = None
     current_app: AbstractApp = None
     calendar: Calendar = get_calendar()
+    pitft_touchscreen = pitft_touchscreen()
 
     def __init__(self):
         self.mq = posix_ipc.MessageQueue("/pitftmanager_ipc", flags=posix_ipc.O_CREAT)
         self.mq.block = False
+
+        self.pitft_touchscreen.start()
 
         app_names = settings.APPS
         for name in app_names:
@@ -112,6 +116,10 @@ class PiTFTManager:
                     raise NotImplementedError()
                 else:
                     logging.warning("Unrecognized command: " + command)
+
+            while not self.pitft_touchscreen.queue_empty():
+                for event in self.pitft_touchscreen.get_event():
+                    logging.debug("PiTFT Event: {}".format(event))
 
             self.calendar.refresh_interval -= 1
             if self.calendar.refresh_interval <= 0:
