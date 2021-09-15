@@ -74,3 +74,8 @@ try:
     from local_settings import WEATHER_CITY
 except ImportError:
     WEATHER_CITY = "Richmond, VA"
+
+try:
+    from local_settings import WEATHER_REFRESH
+except ImportError:
+    WEATHER_REFRESH = 900

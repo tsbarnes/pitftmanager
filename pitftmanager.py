@@ -4,10 +4,13 @@ import time
 import sys
 from types import ModuleType
 import posix_ipc
+from PIL import Image, ImageDraw, ImageFont
+
 import settings
 from framebuffer import Framebuffer
 from apps import AbstractApp
 from libs.calendar import Calendar, get_calendar
+from libs.weather import Weather, get_weather, update_weather
 from pitft_touchscreen import pitft_touchscreen, get_pixels_from_coordinates
 
 
@@ -19,6 +22,7 @@ class PiTFTManager:
     current_app_module: ModuleType = None
     current_app: AbstractApp = None
     calendar: Calendar = get_calendar()
+    weather: Weather = get_weather()
     pitft_touchscreen = pitft_touchscreen()
     touch_x: int = 0
     touch_y: int = 0
@@ -30,6 +34,7 @@ class PiTFTManager:
         self.pitft_touchscreen.start()
 
         self.calendar.get_latest_events()
+        update_weather()
 
         app_names = settings.APPS
         for name in app_names:
@@ -144,6 +149,11 @@ class PiTFTManager:
                 self.calendar.refresh_interval = settings.CALENDAR_REFRESH
                 self.calendar.get_latest_events()
 
+            self.weather.refresh_interval -= 1
+            if self.weather.refresh_interval < 0:
+                self.calendar.refresh_interval = settings.WEATHER_REFRESH
+                update_weather()
+
             for app in self.apps:
                 app.run_iteration()
             self.current_app.show()
@@ -160,6 +170,7 @@ if __name__ == '__main__':
     app.framebuffer.blank()
     # image = wrapped_text("Starting PiTFT Manager...", app.framebuffer.size,
     #                      font_name=settings.FONT, font_size=40, background_color="black")
-    # app.framebuffer.show(image)
+    image = Image.open()
+    app.framebuffer.show(image)
 
     app.main_loop()
