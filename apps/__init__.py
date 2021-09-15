@@ -56,10 +56,15 @@ class AbstractApp:
         avg_char_width: int = sum(font.getsize(char)[0] for char in ascii_letters) / len(ascii_letters)
         max_char_count: int = int((self.image.size[0] * .95) / avg_char_width)
 
+        number_of_lines: int = 0
         scaled_wrapped_text: str = ''
         for line in text.split('\n'):
-            scaled_wrapped_text += textwrap.fill(text=line, width=max_char_count) + '\n'
+            new_wrapped_text = textwrap.fill(text=line, width=max_char_count) + '\n'
+            number_of_lines += len(new_wrapped_text.split('\n'))
+            scaled_wrapped_text += new_wrapped_text
         draw.text(position, scaled_wrapped_text, font=font, fill=color)
+
+        return number_of_lines
 
     def paste_image(self, image, position=(5, 5)):
         if not self.image:
