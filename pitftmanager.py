@@ -125,8 +125,17 @@ class PiTFTManager:
                         self.touch_x = event['x']
                         self.touch_y = event['y']
                     elif event['touch'] == 0:
-                        position = get_pixels_from_coordinates(self.framebuffer, (self.touch_x, self.touch_y))
-                        self.current_app.touch(position)
+                        if event['y'] > self.touch_y + 250:
+                            self.previous_app()
+                        elif event['y'] < self.touch_y - 250:
+                            self.next_app()
+                        # elif event['y'] > self.touch_y + 100:
+                        #     self.current_app.swipe("down")
+                        # elif event['y'] < self.touch_y - 100:
+                        #     self.current_app.swipe("up")
+                        else:
+                            position = get_pixels_from_coordinates(self.framebuffer, (self.touch_x, self.touch_y))
+                            self.current_app.touch(position)
                         self.touch_x = 0
                         self.touch_y = 0
 
