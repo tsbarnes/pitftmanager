@@ -16,7 +16,7 @@ class Example:
 
 class App(AbstractApp):
     """
-    This class provides the screen methods needed by epdtext
+    This class provides the app methods needed by PiTFT Manager
     """
 
     # Add an instance of our Example class
@@ -24,7 +24,7 @@ class App(AbstractApp):
 
     def reload(self):
         """
-        This method should draw the contents of the screen to self.image
+        This method should draw the contents of the app to self.image
         """
 
         # self.blank() resets self.image to a blank image
