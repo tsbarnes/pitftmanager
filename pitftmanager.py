@@ -4,7 +4,7 @@ import time
 import sys
 from types import ModuleType
 import posix_ipc
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 import settings
 from framebuffer import Framebuffer
@@ -28,6 +28,9 @@ class PiTFTManager:
     touch_y: int = 0
 
     def __init__(self):
+        image: Image = Image.open(settings.SPLASH_IMAGE)
+        self.framebuffer.show(image.resize(self.framebuffer.size))
+
         self.mq = posix_ipc.MessageQueue("/pitftmanager_ipc", flags=posix_ipc.O_CREAT)
         self.mq.block = False
 
@@ -166,11 +169,4 @@ if __name__ == '__main__':
     logging.basicConfig(level=settings.LOGLEVEL)
 
     app = PiTFTManager()
-
-    app.framebuffer.blank()
-    # image = wrapped_text("Starting PiTFT Manager...", app.framebuffer.size,
-    #                      font_name=settings.FONT, font_size=40, background_color="black")
-    # image = Image.open("raspberry-pi.png")
-    # app.framebuffer.show(image)
-
     app.main_loop()

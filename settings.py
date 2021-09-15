@@ -79,3 +79,8 @@ try:
     from local_settings import WEATHER_REFRESH
 except ImportError:
     WEATHER_REFRESH = 900
+
+try:
+    from local_settings import SPLASH_IMAGE
+except ImportError:
+    SPLASH_IMAGE = "raspberry-pi.png"
