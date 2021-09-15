@@ -29,6 +29,19 @@ class AbstractApp:
         else:
             self.image = Image.new("RGBA", self.framebuffer.size, settings.BACKGROUND_COLOR)
 
+    def text(self, text, position=(5, 5), font_name=None, font_size=20, color=None):
+        if not font_name:
+            font_name = settings.FONT
+        if not color:
+            color = settings.TEXT_COLOR
+        if not self.image:
+            raise ValueError("self.image is None")
+
+        font: ImageFont = ImageFont.truetype(font_name, font_size)
+        draw: ImageDraw = ImageDraw.Draw(self.image)
+
+        draw.text(position, text, font=font, fill=color)
+
     def wrapped_text(self, text, position=(5, 5), font_name=None, font_size=20, color=None):
         if not font_name:
             font_name = settings.FONT
@@ -47,6 +60,11 @@ class AbstractApp:
         for line in text.split('\n'):
             scaled_wrapped_text += textwrap.fill(text=line, width=max_char_count) + '\n'
         draw.text(position, scaled_wrapped_text, font=font, fill=color)
+
+    def paste_image(self, image, position=(5, 5)):
+        if not self.image:
+            raise ValueError("self.image is None")
+        self.image.paste(image, position)
 
     def show(self):
         if not self.image:

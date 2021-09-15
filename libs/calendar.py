@@ -125,6 +125,22 @@ class Calendar:
 
         return self.events
 
+    def events_as_lines(self):
+        lines = []
+        last_date = None
+
+        for obj in self.events:
+            if obj["start"] != last_date:
+                if obj["start"].date() > datetime.today().date():
+                    lines.append('-- ' + humanize.naturaldate(obj["start"]) + ' --')
+                else:
+                    lines.append('-- ' + humanize.naturaltime(obj["start"], when=datetime.now(self.timezone)) + ' --')
+                last_date = obj["start"]
+
+            lines.append(obj["summary"].replace('\n', ' '))
+
+        return lines
+
     def events_as_string(self):
         text = ''
 

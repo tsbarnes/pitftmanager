@@ -170,7 +170,7 @@ if __name__ == '__main__':
     app.framebuffer.blank()
     # image = wrapped_text("Starting PiTFT Manager...", app.framebuffer.size,
     #                      font_name=settings.FONT, font_size=40, background_color="black")
-    # image = Image.open()
+    # image = Image.open("raspberry-pi.png")
     # app.framebuffer.show(image)
 
     app.main_loop()
