@@ -59,9 +59,9 @@ class Calendar:
                     'start': start,
                     'summary': summary
                 })
-        except ValueError:
+        except ValueError as error:
             logging.error('Error reading calendar "{0}"'.format(url))
-            pass
+            logging.error(error)
 
         return self.events
 
@@ -75,8 +75,8 @@ class Calendar:
 
         calendars = principal.calendars()
 
-        for calendar in calendars:
-            calendar_events = calendar.date_search(start=datetime.today(),
+        for cal in calendars:
+            calendar_events = cal.date_search(start=datetime.today(),
                                                    end=datetime.today() + timedelta(days=7),
                                                    expand=True)
             for event in calendar_events:
@@ -88,7 +88,7 @@ class Calendar:
                     'summary': summary
                 })
 
-            todos = calendar.todos()
+            todos = cal.todos()
 
             for todo in todos:
                 try:
