@@ -29,6 +29,8 @@ class PiTFTManager:
 
         self.pitft_touchscreen.start()
 
+        self.calendar.get_latest_events()
+
         app_names = settings.APPS
         for name in app_names:
             self.load_app(name)
@@ -43,8 +45,6 @@ class PiTFTManager:
         self.switch_app(0)
 
         logging.info("PiTFT Size: {0}x{1}".format(self.framebuffer.size[0], self.framebuffer.size[1]))
-
-        self.calendar.get_latest_events()
 
     def load_app(self, name):
         try:
