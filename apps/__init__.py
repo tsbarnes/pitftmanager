@@ -40,7 +40,7 @@ class AbstractApp:
         else:
             self.image = Image.new("RGBA", self.framebuffer.size, settings.BACKGROUND_COLOR)
 
-    def text(self, text, position=(5, 5), font_name=None, font_size=20, color=None, wrap=False):
+    def text(self, text, position=(5, 5), font_name=None, font_size=20, color=None, wrap=True, max_lines=None):
         """
         Draws text onto the app's image
         :param text: string to draw
@@ -49,6 +49,7 @@ class AbstractApp:
         :param font_size: integer font size to draw
         :param color: color of the text
         :param wrap: boolean whether to wrap the text
+        :param max_lines: number of lines to draw maximum
         :return: integer number of lines drawn
         """
         if not font_name:
@@ -69,11 +70,15 @@ class AbstractApp:
 
             for line in text.split('\n'):
                 new_wrapped_text = textwrap.fill(text=line, width=max_char_count) + '\n'
-                number_of_lines += len(new_wrapped_text.split('\n'))
-                scaled_wrapped_text += new_wrapped_text
+                for wrapped_line in new_wrapped_text.split('\n'):
+                    if not max_lines or number_of_lines < max_lines:
+                        number_of_lines += 1
+                        scaled_wrapped_text += wrapped_line + '\n'
         else:
-            number_of_lines = 1
-            scaled_wrapped_text = text
+            for line in text.split('\n'):
+                if not max_lines or number_of_lines < max_lines:
+                    number_of_lines += 1
+                    scaled_wrapped_text += line + '\n'
 
         draw.text(position, scaled_wrapped_text, font=font, fill=color)
 
@@ -91,6 +96,38 @@ class AbstractApp:
         :return: integer number of lines drawn
         """
         return self.text(text, position, font_name, font_size, color, wrap=True)
+
+    def centered_text(self, text: str, y: int, font_size: int = 20):
+        """
+        Draws text centered horizontally
+        :param text: str text to be displayed
+        :param y: vertical starting position
+        :param font_size: size of font
+        :return: None
+        """
+        font = ImageFont.truetype(settings.FONT, font_size)
+        avg_char_width: int = sum(font.getsize(char)[0] for char in ascii_letters) / len(ascii_letters)
+        number_of_lines = 0
+        for line in text.split('\n'):
+            centered_position = (self.image.size[0] / 2) - (avg_char_width * len(line) / 2)
+            position = (centered_position, y + (number_of_lines * font_size))
+            self.text(text, font_size=font_size, position=position, wrap=False)
+            number_of_lines += 1
+
+        return number_of_lines
+
+    def line(self, position: tuple, fill: any = None, width: int = 5):
+        """
+        Draw a line onto the buffer
+        :param position: tuple position to draw line
+        :param fill: color to fill line with
+        :param width: width of line
+        :return: None
+        """
+        if not fill:
+            fill = settings.TEXT_COLOR
+        draw = ImageDraw.Draw(self.image)
+        draw.line(position, fill, width)
 
     def paste_image(self, image, position=(5, 5)):
         """
