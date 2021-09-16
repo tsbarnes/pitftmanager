@@ -77,8 +77,8 @@ class Calendar:
 
         for cal in calendars:
             calendar_events = cal.date_search(start=datetime.today(),
-                                                   end=datetime.today() + timedelta(days=7),
-                                                   expand=True)
+                                              end=datetime.today() + timedelta(days=7),
+                                              expand=True)
             for event in calendar_events:
                 start = self.standardize_date(event.vobject_instance.vevent.dtstart.value)
                 summary = event.vobject_instance.vevent.summary.value
