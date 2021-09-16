@@ -1,3 +1,4 @@
+import logging
 from apps import AbstractApp
 from libs.calendar import Calendar, get_calendar, update_calendar
 from libs.weather import Weather, get_weather, update_weather
@@ -9,10 +10,9 @@ class App(AbstractApp):
 
     def reload(self):
         self.blank()
-        self.blank()
 
-        # logo = self.weather.get_icon()
-        # self.image.paste(logo, (20, 20))
+        logo = self.weather.get_icon()
+        self.image.paste(logo, (20, 20))
 
         text = str(self.weather.weather.current.temperature) + '°'
         self.text(text, font_size=48, position=(60, 5))
@@ -28,9 +28,7 @@ class App(AbstractApp):
         self.text(text, font_size=14, position=(5, 80), wrap=True)
 
     def touch(self, position: tuple):
-        """
-        Called when the user taps the screen while the app is active
-        :param position: tuple coordinates (in pixels) of the tap
-        :return: None
-        """
-        pass
+        if position[0] in range(10, 50):
+            if position[1] in range(10, 50):
+                logging.debug("Weather icon touched")
+        logging.debug("Position {} touched".format(position))

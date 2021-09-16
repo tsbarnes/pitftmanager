@@ -94,6 +94,9 @@ class Framebuffer(object):
         args = (self.path, self.size, self.stride, self.bits_per_pixel)
         return "%s  size:%s  stride:%s  bits_per_pixel:%s" % args
 
+    def __del__(self):
+        self.blank()
+
     # Note: performance is terrible even for medium resolutions
     def show(self, image: Image):
         self.image = image
