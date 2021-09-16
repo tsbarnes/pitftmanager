@@ -1,6 +1,8 @@
 import python_weather
 import asyncio
+import logging
 import settings
+from PIL import Image
 
 
 class Weather:
@@ -18,6 +20,19 @@ class Weather:
         client = python_weather.Client(format=settings.WEATHER_FORMAT)
         self.weather = await client.find(settings.WEATHER_CITY)
         await client.close()
+
+    def get_icon(self):
+        """
+        Get the icon for the current weather
+        :return: Image of the icon
+        """
+        # TODO: this function should check the sky code and choose the icon accordingly
+        # For now it just uses the sun icon for all weather
+        if self.weather.current.sky_code == 0:
+            return Image.open("sun.png")
+        else:
+            logging.warning("Unable to find icon for sky code: {}".format(self.weather.current.sky_code))
+            return Image.open("sun.png")
 
 
 weather: Weather = Weather()

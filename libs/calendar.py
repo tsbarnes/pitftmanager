@@ -164,9 +164,16 @@ class Calendar:
 
         return text
 
+    def humanized_datetime(self, dt: datetime):
+        return '-- ' + humanize.naturaltime(dt, when=datetime.now(self.timezone)) + ' --\n'
+
 
 calendar = Calendar()
 
 
 def get_calendar():
     return calendar
+
+
+def update_calendar():
+    calendar.get_latest_events()

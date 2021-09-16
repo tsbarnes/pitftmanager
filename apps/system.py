@@ -10,6 +10,8 @@ from apps import AbstractApp
 
 
 class App(AbstractApp):
+    reload_interval = 5
+
     def reload(self):
         self.blank()
         draw: ImageDraw = ImageDraw.Draw(self.image)
