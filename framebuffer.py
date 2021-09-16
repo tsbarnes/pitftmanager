@@ -13,6 +13,7 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFont
 import numpy
 import time
+import logging
 
 
 def _read_and_convert_to_ints(filename):
@@ -99,6 +100,7 @@ class Framebuffer(object):
         self.redraw_screen()
 
     def redraw_screen(self):
+        # logging.debug(_CONVERTER[(self.image.mode, self.bits_per_pixel)])
         converter = _CONVERTER[(self.image.mode, self.bits_per_pixel)]
         assert self.image.size == self.size
         out = converter(self.image)

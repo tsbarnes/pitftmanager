@@ -52,7 +52,7 @@ except ImportError:
 try:
     from local_settings import BACKGROUND
 except ImportError:
-    BACKGROUND = None
+    BACKGROUND = "wallpaper.png"
 
 try:
     from local_settings import TEXT_COLOR
