@@ -2,6 +2,16 @@
 from apps import AbstractApp
 
 
+"""
+This block shows how to add a setting for your app.
+The line after the except sets the default value for the setting
+"""
+try:
+    from local_settings import HELLO
+except ImportError:
+    HELLO = "Hello World!"
+
+
 class Example:
     """
     Just another class, feel free to make it do whatever you want
@@ -11,7 +21,7 @@ class Example:
         This method just returns some text, yours can do anything you want
         :return: str
         """
-        return "Hello World!"
+        return HELLO
 
 
 class App(AbstractApp):
