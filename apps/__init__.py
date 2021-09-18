@@ -3,6 +3,7 @@ import pathlib
 import os
 import inspect
 import textwrap
+import uuid
 from pathlib import Path
 from string import ascii_letters
 from typing import Generator
@@ -148,6 +149,10 @@ class AbstractApp:
         if not self.image:
             logging.error("App '{0}' called 'show' without an image!".format(self.__module__))
             self.blank()
+        if settings.SAVE_SCREENSHOTS:
+            filename = '/tmp/{0}-{1}.png'.format(self.__module__, uuid.uuid4())
+            logging.debug("Saving screenshot to {}".format(filename))
+            self.image.save(filename)
         self.framebuffer.show(self.image)
 
     def reload(self):
