@@ -2,6 +2,7 @@ import importlib
 import logging
 import time
 import sys
+import signal
 from types import ModuleType
 import posix_ipc
 from PIL import Image
@@ -36,6 +37,9 @@ class PiTFTManager:
 
         self.pitft_touchscreen.start()
 
+        signal.signal(signal.SIGINT, self.quit)
+        signal.signal(signal.SIGTERM, self.quit)
+
         self.calendar.get_latest_events()
         update_weather()
 
@@ -53,6 +57,14 @@ class PiTFTManager:
         self.switch_app(0)
 
         logging.info("PiTFT Size: {0}x{1}".format(self.framebuffer.size[0], self.framebuffer.size[1]))
+
+    def quit(self, *args):
+        logging.info("PiTFT Manager quitting gracefully...")
+        self.pitft_touchscreen.stop()
+        self.framebuffer.blank()
+        while len(self.apps) > 0:
+            del self.apps[0]
+        exit(0)
 
     def load_app(self, name):
         try:
