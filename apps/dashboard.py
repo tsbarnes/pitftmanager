@@ -20,21 +20,24 @@ class App(AbstractApp):
         text = str(self.weather.weather.current.sky_text)
         self.text(text, font_size=20, position=(150, 20))
 
-        self.line((0, 60, self.image.size[0], 60), width=2)
+        self.line((0, 70, self.image.size[0], 70), width=2)
 
         if len(self.calendar.events) > 0:
             start = self.calendar.standardize_date(self.calendar.events[0]["start"])
             text = self.calendar.humanized_datetime(start)
-            self.text(text, font_size=24, position=(5, 60), color="orange")
+            self.text(text, font_size=24, position=(5, 80), color="orange", max_lines=1)
 
             text = str(self.calendar.events[0]['summary'])
-            self.text(text, font_size=24, position=(5, 90), wrap=True, max_lines=2)
+            self.text(text, font_size=24, position=(5, 110), wrap=True, max_lines=2)
 
-        self.line((0, 160, self.image.size[0], 160), width=2)
+        self.line((0, 180, self.image.size[0], 180), width=2)
 
         if len(self.calendar.tasks) > 0:
             text = str(self.calendar.tasks[0]['summary'])
-            self.text(text, font_size=24, position=(5, 170), wrap=True, max_lines=2)
+            self.text(text, font_size=24, position=(5, 190), wrap=True, max_lines=2)
+            if self.calendar.tasks[0].get('due'):
+                text = self.calendar.humanized_datetime(self.calendar.tasks[0]['due'])
+                self.text(text, font_size=24, position=(5, 220), wrap=True, max_lines=1)
 
     def touch(self, position: tuple):
         if position[0] in range(0, 60):
