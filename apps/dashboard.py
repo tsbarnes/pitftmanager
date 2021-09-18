@@ -24,7 +24,7 @@ class App(AbstractApp):
 
         if len(self.calendar.events) > 0:
             start = self.calendar.standardize_date(self.calendar.events[0]["start"])
-            text = self.calendar.humanized_datetime(start)
+            text = ' -- ' + self.calendar.humanized_datetime(start) + ' -- '
             self.text(text, font_size=24, position=(5, 80), color="orange", max_lines=1)
 
             text = str(self.calendar.events[0]['summary'])
@@ -36,7 +36,7 @@ class App(AbstractApp):
             text = str(self.calendar.tasks[0]['summary'])
             self.text(text, font_size=24, position=(5, 190), wrap=True, max_lines=2)
             if self.calendar.tasks[0].get('due'):
-                text = self.calendar.humanized_datetime(self.calendar.tasks[0]['due'])
+                text = ' - Due: ' + self.calendar.humanized_datetime(self.calendar.tasks[0]['due'])
                 self.text(text, font_size=24, position=(5, 220), wrap=True, max_lines=1)
 
     def touch(self, position: tuple):
@@ -44,4 +44,7 @@ class App(AbstractApp):
             if position[1] in range(0, 60):
                 logging.debug("Weather icon touched")
                 update_weather()
+        elif position[1] in range(70, 180):
+            logging.debug("Calendar touched")
+            update_calendar()
         logging.debug("Position {} touched".format(position))
