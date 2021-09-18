@@ -25,19 +25,19 @@ class App(AbstractApp):
         if len(self.calendar.events) > 0:
             start = self.calendar.standardize_date(self.calendar.events[0]["start"])
             text = ' -- ' + self.calendar.humanized_datetime(start) + ' -- '
-            self.text(text, font_size=24, position=(5, 80), color="orange", max_lines=1)
+            self.text(text, font_size=24, position=(5, 80), color="yellow", max_lines=1)
 
             text = str(self.calendar.events[0]['summary'])
-            self.text(text, font_size=24, position=(5, 110), wrap=True, max_lines=2)
+            self.text(text, font_size=24, position=(5, 110), max_lines=2)
 
         self.line((0, 180, self.image.size[0], 180), width=2)
 
         if len(self.calendar.tasks) > 0:
             text = str(self.calendar.tasks[0]['summary'])
-            self.text(text, font_size=24, position=(5, 190), wrap=True, max_lines=2)
+            self.text(text, font_size=24, position=(5, 190), max_lines=2)
             if self.calendar.tasks[0].get('due'):
                 text = ' - Due: ' + self.calendar.humanized_datetime(self.calendar.tasks[0]['due'])
-                self.text(text, font_size=24, position=(5, 220), wrap=True, max_lines=1)
+                self.text(text, font_size=24, position=(5, 220), color="yellow", max_lines=1)
 
     def touch(self, position: tuple):
         if position[1] in range(0, 70):
