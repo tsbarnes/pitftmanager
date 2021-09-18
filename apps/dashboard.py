@@ -40,7 +40,8 @@ class App(AbstractApp):
                 self.text(text, font_size=24, position=(5, 220), wrap=True, max_lines=1)
 
     def touch(self, position: tuple):
-        if position[0] in range(0, 60):
+        if position[0] in range(0, 70):
             if position[1] in range(0, 60):
                 logging.debug("Weather icon touched")
+                update_weather()
         logging.debug("Position {} touched".format(position))

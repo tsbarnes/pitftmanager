@@ -56,11 +56,11 @@ class PiTFTManager:
 
     def load_app(self, name):
         try:
-            module = importlib.import_module(name)
+            module = importlib.import_module("apps." + name)
             self.app_modules.append(module)
         except ImportError:
             try:
-                module = importlib.import_module("apps." + name)
+                module = importlib.import_module(name)
                 self.app_modules.append(module)
             except ImportError:
                 logging.error("Couldn't load app '{0}'" % name)
@@ -129,7 +129,7 @@ class PiTFTManager:
 
             while not self.pitft_touchscreen.queue_empty():
                 for event in self.pitft_touchscreen.get_event():
-                    if event['touch'] == 1 and self.touch_x == 0:
+                    if event['touch'] == 1 and self.touch_x == 0 and self.touch_y == 0:
                         self.touch_x = event['x']
                         self.touch_y = event['y']
                     elif event['touch'] == 0:
