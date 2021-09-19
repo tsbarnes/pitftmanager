@@ -41,9 +41,19 @@ class App(AbstractApp):
 
     def touch(self, position: tuple):
         if position[1] in range(0, 70):
-            logging.debug("Weather icon touched")
+            logging.debug("Weather touched")
+            self.blank()
+            self.centered_text("Please wait...", font_size=50, y=50)
+            self.show()
             update_weather()
+            self.reload()
+            self.show()
         elif position[1] in range(70, 180):
             logging.debug("Calendar touched")
+            self.blank()
+            self.centered_text("Please wait...", font_size=50, y=50)
+            self.show()
             update_calendar()
+            self.reload()
+            self.show()
         logging.debug("Position {} touched".format(position))

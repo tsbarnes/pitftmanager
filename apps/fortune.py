@@ -16,3 +16,7 @@ class App(AbstractApp):
             logging.error("couldn't run application 'fortune'")
             self.output = ''
         self.wrapped_text(self.output, (5, 5), font_size=16)
+
+    def touch(self, position: tuple):
+        self.reload()
+        self.show()

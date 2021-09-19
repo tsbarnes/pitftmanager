@@ -19,3 +19,8 @@ class App(AbstractApp):
         self.blank()
         self.current_affirmation = self.get_random_affirmation()
         self.wrapped_text(self.current_affirmation, (5, 5), font_size=40)
+
+    def touch(self, position: tuple):
+        self.get_random_affirmation()
+        self.reload()
+        self.show()
