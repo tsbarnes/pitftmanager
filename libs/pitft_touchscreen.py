@@ -16,8 +16,6 @@ except ImportError:
     # python 2.7
     import Queue as queue
 
-from framebuffer import Framebuffer
-
 
 # Class for handling events from piTFT
 class pitft_touchscreen(threading.Thread):

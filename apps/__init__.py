@@ -9,7 +9,7 @@ from string import ascii_letters
 from typing import Generator
 from PIL import Image, ImageDraw, ImageFont
 import settings
-from framebuffer import Framebuffer
+from libs.framebuffer import Framebuffer
 
 
 class AbstractApp:

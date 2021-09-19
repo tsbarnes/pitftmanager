@@ -8,11 +8,11 @@ import posix_ipc
 from PIL import Image
 
 import settings
-from framebuffer import Framebuffer
+from libs.framebuffer import Framebuffer
 from apps import AbstractApp
 from libs.calendar import Calendar, get_calendar
 from libs.weather import Weather, get_weather, update_weather
-from pitft_touchscreen import pitft_touchscreen, get_pixels_from_coordinates
+from libs.pitft_touchscreen import pitft_touchscreen, get_pixels_from_coordinates
 
 
 class PiTFTManager:
