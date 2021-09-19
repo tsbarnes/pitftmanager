@@ -27,6 +27,7 @@ class PiTFTManager:
     pitft_touchscreen = PiTFTTouchscreen()
     touch_x: int = 0
     touch_y: int = 0
+    full_second: bool = False
 
     def __init__(self):
         self.framebuffer.start()
@@ -161,20 +162,32 @@ class PiTFTManager:
                         self.touch_x = 0
                         self.touch_y = 0
 
-            self.calendar.refresh_interval -= 1
-            if self.calendar.refresh_interval <= 0:
-                self.calendar.refresh_interval = settings.CALENDAR_REFRESH
-                self.calendar.get_latest_events()
+            if self.full_second:
+                self.full_second = False
+                self.calendar.refresh_interval -= 1
+                if self.calendar.refresh_interval <= 0:
+                    self.calendar.refresh_interval = settings.CALENDAR_REFRESH
+                    self.calendar.get_latest_events()
 
-            self.weather.refresh_interval -= 1
-            if self.weather.refresh_interval < 0:
-                self.calendar.refresh_interval = settings.WEATHER_REFRESH
-                update_weather()
+                self.weather.refresh_interval -= 1
+                if self.weather.refresh_interval < 0:
+                    self.calendar.refresh_interval = settings.WEATHER_REFRESH
+                    update_weather()
+
+                self.current_app.reload_wait += 1
+                if not self.current_app.image or self.current_app.reload_wait >= self.current_app.reload_interval:
+                    if self.current_app.image:
+                        logging.debug("App '{0}' hit auto-reload interval ({1} seconds)".format(
+                            type(self).__module__, self.current_app.reload_interval))
+                    self.current_app.reload_wait = 0
+                    self.current_app.reload()
+            else:
+                self.full_second = True
 
             for app in self.apps:
                 app.run_iteration()
             self.current_app.show()
-            time.sleep(1)
+            time.sleep(0.5)
 
 
 if __name__ == '__main__':

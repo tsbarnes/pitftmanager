@@ -70,7 +70,7 @@ class AbstractApp:
             max_char_count: int = int((self.image.size[0] * .95) / avg_char_width)
 
             for line in text.split('\n'):
-                new_wrapped_text = textwrap.fill(text=line, width=max_char_count) + '\n'
+                new_wrapped_text = textwrap.fill(text=line, width=max_char_count)
                 for wrapped_line in new_wrapped_text.split('\n'):
                     if not max_lines or number_of_lines < max_lines:
                         number_of_lines += 1
@@ -172,16 +172,10 @@ class AbstractApp:
 
     def run_iteration(self):
         """
-        Main loop function. If you override this, be sure to call super().run_iteration()
+        Main loop function.
         :return: None
         """
-        self.reload_wait += 1
-        if not self.image or self.reload_wait >= self.reload_interval:
-            if self.image:
-                logging.debug("App '{0}' hit auto-reload interval ({1} seconds)".format(
-                    type(self).__module__, self.reload_interval))
-            self.reload_wait = 0
-            self.reload()
+        pass
 
 
 def get_apps():
