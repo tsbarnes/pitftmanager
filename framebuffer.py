@@ -107,8 +107,11 @@ class Framebuffer(object):
         converter = _CONVERTER[(self.image.mode, self.bits_per_pixel)]
         assert self.image.size == self.size
         out = converter(self.image)
-        with open(self.path, "wb") as fp:
-            fp.write(out)
+        try:
+            with open(self.path, "wb") as fp:
+                fp.write(out)
+        except NameError:
+            pass
 
     def blank(self):
         self.image = Image.new("RGBA", self.size)
