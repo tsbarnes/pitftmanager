@@ -18,9 +18,9 @@ except ImportError:
 
 
 # Class for handling events from piTFT
-class pitft_touchscreen(threading.Thread):
+class PiTFTTouchscreen(threading.Thread):
     def __init__(self, device_path=os.getenv("PIGAME_TS") or "/dev/input/touchscreen", grab=False):
-        super(pitft_touchscreen, self).__init__()
+        super(PiTFTTouchscreen, self).__init__()
         self.device_path = device_path
         self.grab = grab
         self.events = queue.Queue()

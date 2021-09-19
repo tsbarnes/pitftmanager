@@ -12,7 +12,7 @@ from libs.framebuffer import Framebuffer
 from apps import AbstractApp
 from libs.calendar import Calendar, get_calendar
 from libs.weather import Weather, get_weather, update_weather
-from libs.pitft_touchscreen import pitft_touchscreen, get_pixels_from_coordinates
+from libs.pitfttouchscreen import PiTFTTouchscreen, get_pixels_from_coordinates
 
 
 class PiTFTManager:
@@ -24,7 +24,7 @@ class PiTFTManager:
     current_app: AbstractApp = None
     calendar: Calendar = get_calendar()
     weather: Weather = get_weather()
-    pitft_touchscreen = pitft_touchscreen()
+    pitft_touchscreen = PiTFTTouchscreen()
     touch_x: int = 0
     touch_y: int = 0
 
