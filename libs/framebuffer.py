@@ -78,6 +78,7 @@ _CONVERTER = {
 
 class Framebuffer(threading.Thread):
     image: Image = None
+    dirty: bool = True
 
     def __init__(self, device_no: int):
         super().__init__()
@@ -102,18 +103,22 @@ class Framebuffer(threading.Thread):
 
     # Note: performance is terrible even for medium resolutions
     def show(self, image: Image):
-        self.image = image
+        if image != self.image:
+            self.image = image
+            self.dirty = True
 
     def redraw_screen(self):
-        # logging.debug(_CONVERTER[(self.image.mode, self.bits_per_pixel)])
-        converter = _CONVERTER[(self.image.mode, self.bits_per_pixel)]
-        assert self.image.size == self.size
-        out = converter(self.image)
-        try:
-            with open(self.path, "wb") as fp:
-                fp.write(out)
-        except NameError:
-            pass
+        if self.dirty:
+            # logging.debug(_CONVERTER[(self.image.mode, self.bits_per_pixel)])
+            converter = _CONVERTER[(self.image.mode, self.bits_per_pixel)]
+            assert self.image.size == self.size
+            out = converter(self.image)
+            try:
+                with open(self.path, "wb") as fp:
+                    fp.write(out)
+            except NameError:
+                pass
+            self.dirty = False
 
     def run(self):
         thread_process = threading.Thread(target=self.loop)
