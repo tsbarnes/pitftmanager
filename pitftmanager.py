@@ -29,6 +29,8 @@ class PiTFTManager:
     touch_y: int = 0
 
     def __init__(self):
+        self.framebuffer.start()
+
         image: Image = Image.open(settings.SPLASH_IMAGE)
         self.framebuffer.show(image.resize(self.framebuffer.size))
 

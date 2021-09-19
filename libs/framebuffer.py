@@ -14,6 +14,7 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy
 import time
 import logging
+import threading
 
 
 def _read_and_convert_to_ints(filename):
@@ -75,10 +76,11 @@ _CONVERTER = {
 }
 
 
-class Framebuffer(object):
+class Framebuffer(threading.Thread):
     image: Image = None
 
     def __init__(self, device_no: int):
+        super().__init__()
         self.path = "/dev/fb%d" % device_no
         config_dir = "/sys/class/graphics/fb%d/" % device_no
         self.size = tuple(_read_and_convert_to_ints(
@@ -89,6 +91,7 @@ class Framebuffer(object):
         assert self.stride == self.bits_per_pixel // 8 * self.size[0]
 
         self.image = Image.new("RGBA", self.size, "#000000")
+        self.shutdown = threading.Event()
 
     def __str__(self):
         args = (self.path, self.size, self.stride, self.bits_per_pixel)
@@ -100,7 +103,6 @@ class Framebuffer(object):
     # Note: performance is terrible even for medium resolutions
     def show(self, image: Image):
         self.image = image
-        self.redraw_screen()
 
     def redraw_screen(self):
         # logging.debug(_CONVERTER[(self.image.mode, self.bits_per_pixel)])
@@ -112,6 +114,18 @@ class Framebuffer(object):
                 fp.write(out)
         except NameError:
             pass
+
+    def run(self):
+        thread_process = threading.Thread(target=self.loop)
+        # run thread as a daemon so it gets cleaned up on exit.
+        thread_process.daemon = True
+        thread_process.start()
+        self.shutdown.wait()
+
+    def loop(self):
+        while not self.shutdown.is_set():
+            self.redraw_screen()
+            time.sleep(0.1)
 
     def blank(self):
         self.image = Image.new("RGBA", self.size)
