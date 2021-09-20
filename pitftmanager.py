@@ -31,6 +31,8 @@ class PiTFTManager:
 
     def __init__(self):
         self.framebuffer.start()
+        self.calendar.start()
+        self.weather.start()
 
         image: Image = Image.open(settings.SPLASH_IMAGE)
         self.framebuffer.show(image.resize(self.framebuffer.size))
@@ -164,10 +166,6 @@ class PiTFTManager:
 
             if self.full_second:
                 self.full_second = False
-                self.calendar.refresh_interval -= 1
-                if self.calendar.refresh_interval <= 0:
-                    self.calendar.refresh_interval = settings.CALENDAR_REFRESH
-                    self.calendar.get_latest_events()
 
                 self.weather.refresh_interval -= 1
                 if self.weather.refresh_interval < 0:
