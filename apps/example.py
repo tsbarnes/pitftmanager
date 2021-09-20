@@ -39,6 +39,8 @@ class App(AbstractApp):
 
         # self.blank() resets self.image to a blank image
         self.blank()
+        # self.draw_titlebar(str) creates the titlebar at the top
+        self.draw_titlebar("Example")
 
         # self.text(text) draws the text to self.image
         # Optional parameters include font, font_size, position, and color

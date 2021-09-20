@@ -14,6 +14,8 @@ class App(AbstractApp):
 
     def reload(self):
         self.blank()
+        self.draw_titlebar("System")
+
         draw: ImageDraw = ImageDraw.Draw(self.image)
         font: ImageFont = ImageFont.truetype(settings.MONOSPACE_FONT, 25)
 
@@ -35,12 +37,12 @@ class App(AbstractApp):
         uptime: datetime.timedelta = datetime.timedelta(seconds=time.clock_gettime(time.CLOCK_BOOTTIME))
         text += 'Uptime:  ' + humanize.naturaldelta(uptime)
 
-        draw.text((5, 90), text, font=font, fill=settings.TEXT_COLOR)
+        draw.text((5, 120), text, font=font, fill=settings.TEXT_COLOR)
 
         logo: Image = Image.open('images/raspberry-pi.png')
         logo.thumbnail((80, 80))
         centered_position: int = round(self.framebuffer.size[0] / 2 - 40)
-        box: tuple = (centered_position, 5)
+        box: tuple = (centered_position, 30)
 
         try:
             self.image.paste(logo, box)

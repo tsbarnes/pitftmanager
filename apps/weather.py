@@ -8,19 +8,20 @@ class App(AbstractApp):
 
     def reload(self):
         self.blank()
+        self.draw_titlebar("Weather")
 
         try:
             centered_position: int = round(self.framebuffer.size[0] / 2 - 40)
             box: tuple = (centered_position, 5)
 
             text = str(self.weather.weather.current.temperature) + '°'
-            self.wrapped_text(text, font_size=80, position=(centered_position, 10))
+            self.wrapped_text(text, font_size=80, position=(centered_position, 30))
 
             text = str(self.weather.weather.current.sky_text)
-            self.wrapped_text(text, font_size=40, position=(centered_position, 100))
+            self.wrapped_text(text, font_size=40, position=(centered_position, 120))
 
             text = str(self.weather.weather.current.day)
-            self.wrapped_text(text, font_size=40, position=(centered_position, 150))
+            self.wrapped_text(text, font_size=40, position=(centered_position, 170))
 
             logging.debug("Sky Code: " + str(self.weather.weather.current.sky_code))
         except AttributeError:

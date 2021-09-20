@@ -1,10 +1,8 @@
 import logging
 import pathlib
 import os
-import time
 import inspect
 import textwrap
-import threading
 import uuid
 from pathlib import Path
 from string import ascii_letters
@@ -14,7 +12,7 @@ import settings
 from libs.framebuffer import Framebuffer
 
 
-class AbstractApp(threading.Thread):
+class AbstractApp:
     """
     Abstract class for apps
     """
@@ -28,33 +26,9 @@ class AbstractApp(threading.Thread):
         Default app constructor, sets the framebuffer
         :param fb: Framebuffer
         """
-        super().__init__()
-        self.name = self.__module__
         self.framebuffer = fb
         self.blank()
         self.reload()
-
-    def run(self) -> None:
-        """
-        This method starts the thread
-        """
-        thread_process = threading.Thread(target=self.main_loop)
-        # run thread as a daemon so it gets cleaned up on exit.
-        thread_process.daemon = True
-        thread_process.start()
-
-    def main_loop(self):
-        """
-        Main loop, do not override! See run_iteration
-        """
-        self.reload_wait += 1
-        if not self.image or self.reload_wait >= self.reload_interval:
-            if self.image:
-                logging.debug("App '{0}' hit auto-reload interval ({1} seconds)".format(
-                    type(self).__module__, self.reload_interval))
-            self.reload_wait = 0
-            self.reload()
-        time.sleep(1)
 
     def blank(self):
         """
@@ -124,10 +98,11 @@ class AbstractApp(threading.Thread):
         """
         return self.text(text, position, font_name, font_size, color, wrap=True)
 
-    def centered_text(self, text: str, y: int, font_size: int = 20):
+    def centered_text(self, text: str, color: any = "white", y: int = 0, font_size: int = 20):
         """
         Draws text centered horizontally
         :param text: str text to be displayed
+        :param color: any color to use for text
         :param y: vertical starting position
         :param font_size: size of font
         :return: None
@@ -138,7 +113,7 @@ class AbstractApp(threading.Thread):
         for line in text.split('\n'):
             centered_position = (self.image.size[0] / 2) - (avg_char_width * len(line) / 2)
             position = (centered_position, y + (number_of_lines * font_size))
-            self.text(text, font_size=font_size, position=position, wrap=False)
+            self.text(text, color=color, font_size=font_size, position=position, wrap=False)
             number_of_lines += 1
 
         return number_of_lines
@@ -155,6 +130,17 @@ class AbstractApp(threading.Thread):
             fill = settings.TEXT_COLOR
         draw = ImageDraw.Draw(self.image)
         draw.line(position, fill, width)
+
+    def draw_titlebar(self, text, color="white", background="black", y=0):
+        """
+        Draws a titlebar
+        :param text: str title to display
+        :param color: any color to use for text
+        :param background: any color to use for background
+        :param y: int position on the y axis
+        """
+        self.centered_text(text, color=color, y=y, font_size=20)
+        self.line((0, 25, self.framebuffer.size[0], 25), fill=color, width=5)
 
     def paste_image(self, image, position=(5, 5)):
         """
@@ -201,7 +187,13 @@ class AbstractApp(threading.Thread):
         Main loop function.
         :return: None
         """
-        pass
+        self.reload_wait += 1
+        if not self.image or self.reload_wait >= self.reload_interval:
+            if self.image:
+                logging.debug("App '{0}' hit auto-reload interval ({1} seconds)".format(
+                    type(self).__module__, self.reload_interval))
+            self.reload_wait = 0
+            self.reload()
 
 
 def get_apps():

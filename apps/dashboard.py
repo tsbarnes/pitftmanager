@@ -10,34 +10,35 @@ class App(AbstractApp):
 
     def reload(self):
         self.blank()
+        self.draw_titlebar("Dashboard")
 
         logo = self.weather.get_icon()
-        self.image.paste(logo, (20, 20))
+        self.image.paste(logo, (20, 35))
 
         text = str(self.weather.weather.current.temperature) + '°'
-        self.text(text, font_size=48, position=(60, 5))
+        self.text(text, font_size=48, position=(60, 25))
 
         text = str(self.weather.weather.current.sky_text)
-        self.text(text, font_size=20, position=(150, 20))
+        self.text(text, font_size=20, position=(150, 35))
 
-        self.line((0, 70, self.image.size[0], 70), width=2)
+        self.line((0, 80, self.image.size[0], 80), width=2)
 
         if len(self.calendar.events) > 0:
             start = self.calendar.standardize_date(self.calendar.events[0]["start"])
             text = ' -- ' + self.calendar.humanized_datetime(start) + ' -- '
-            self.text(text, font_size=24, position=(5, 80), color="yellow", max_lines=1)
+            self.text(text, font_size=24, position=(5, 90), color="yellow", max_lines=1)
 
             text = str(self.calendar.events[0]['summary'])
-            self.text(text, font_size=24, position=(5, 110), max_lines=2)
+            self.text(text, font_size=24, position=(5, 120), max_lines=2)
 
-        self.line((0, 180, self.image.size[0], 180), width=2)
+        self.line((0, 190, self.image.size[0], 190), width=2)
 
         if len(self.calendar.tasks) > 0:
             text = str(self.calendar.tasks[0]['summary'])
-            self.text(text, font_size=24, position=(5, 190), max_lines=2)
+            self.text(text, font_size=24, position=(5, 200), max_lines=2)
             if self.calendar.tasks[0].get('due'):
                 text = ' - Due: ' + self.calendar.humanized_datetime(self.calendar.tasks[0]['due'])
-                self.text(text, font_size=24, position=(5, 220), color="yellow", max_lines=1)
+                self.text(text, font_size=24, position=(5, 230), color="yellow", max_lines=1)
 
     def touch(self, position: tuple):
         if position[1] in range(0, 70):

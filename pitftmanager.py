@@ -59,7 +59,6 @@ class PiTFTManager:
         for module in self.app_modules:
             this_app = module.App(self.framebuffer)
             self.apps.append(this_app)
-            this_app.start()
 
         self.switch_app(0)
 
