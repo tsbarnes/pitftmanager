@@ -1,8 +1,10 @@
 import logging
 import pathlib
 import os
+import time
 import inspect
 import textwrap
+import threading
 import uuid
 from pathlib import Path
 from string import ascii_letters
@@ -12,7 +14,7 @@ import settings
 from libs.framebuffer import Framebuffer
 
 
-class AbstractApp:
+class AbstractApp(threading.Thread):
     """
     Abstract class for apps
     """
@@ -26,9 +28,33 @@ class AbstractApp:
         Default app constructor, sets the framebuffer
         :param fb: Framebuffer
         """
+        super().__init__()
+        self.name = self.__module__
         self.framebuffer = fb
         self.blank()
         self.reload()
+
+    def run(self) -> None:
+        """
+        This method starts the thread
+        """
+        thread_process = threading.Thread(target=self.main_loop)
+        # run thread as a daemon so it gets cleaned up on exit.
+        thread_process.daemon = True
+        thread_process.start()
+
+    def main_loop(self):
+        """
+        Main loop, do not override! See run_iteration
+        """
+        self.reload_wait += 1
+        if not self.image or self.reload_wait >= self.reload_interval:
+            if self.image:
+                logging.debug("App '{0}' hit auto-reload interval ({1} seconds)".format(
+                    type(self).__module__, self.reload_interval))
+            self.reload_wait = 0
+            self.reload()
+        time.sleep(1)
 
     def blank(self):
         """

@@ -50,10 +50,10 @@ class Weather(threading.Thread):
         # TODO: this function should check the sky code and choose the icon accordingly
         # For now it just uses the sun icon for all weather
         if self.weather.current.sky_code == 0:
-            return Image.open("sun.png")
+            return Image.open("images/sun.png")
         else:
             logging.warning("Unable to find icon for sky code: {}".format(self.weather.current.sky_code))
-            return Image.open("sun.png")
+            return Image.open("images/sun.png")
 
 
 weather: Weather = Weather()

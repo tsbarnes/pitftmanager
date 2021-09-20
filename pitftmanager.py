@@ -57,7 +57,9 @@ class PiTFTManager:
             sys.exit(1)
 
         for module in self.app_modules:
-            self.apps.append(module.App(self.framebuffer))
+            this_app = module.App(self.framebuffer)
+            self.apps.append(this_app)
+            this_app.start()
 
         self.switch_app(0)
 
@@ -166,24 +168,11 @@ class PiTFTManager:
 
             if self.full_second:
                 self.full_second = False
-
-                self.weather.refresh_interval -= 1
-                if self.weather.refresh_interval < 0:
-                    self.calendar.refresh_interval = settings.WEATHER_REFRESH
-                    update_weather()
-
-                self.current_app.reload_wait += 1
-                if not self.current_app.image or self.current_app.reload_wait >= self.current_app.reload_interval:
-                    if self.current_app.image:
-                        logging.debug("App '{0}' hit auto-reload interval ({1} seconds)".format(
-                            type(self).__module__, self.current_app.reload_interval))
-                    self.current_app.reload_wait = 0
-                    self.current_app.reload()
+                for this_app in self.apps:
+                    this_app.run_iteration()
             else:
                 self.full_second = True
 
-            for app in self.apps:
-                app.run_iteration()
             self.current_app.show()
             time.sleep(0.5)
 

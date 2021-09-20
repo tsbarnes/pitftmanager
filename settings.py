@@ -52,7 +52,7 @@ except ImportError:
 try:
     from local_settings import BACKGROUND
 except ImportError:
-    BACKGROUND = "wallpaper.png"
+    BACKGROUND = "images/wallpaper.png"
 
 try:
     from local_settings import TEXT_COLOR
@@ -83,7 +83,7 @@ except ImportError:
 try:
     from local_settings import SPLASH_IMAGE
 except ImportError:
-    SPLASH_IMAGE = "raspberry-pi.png"
+    SPLASH_IMAGE = "images/raspberry-pi.png"
 
 try:
     from local_settings import SAVE_SCREENSHOTS
