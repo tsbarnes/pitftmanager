@@ -135,14 +135,15 @@ class AbstractApp:
         draw = ImageDraw.Draw(self.image)
         draw.line(position, fill, width)
 
-    def draw_titlebar(self, text, color="white", background="black", y=0):
+    def draw_titlebar(self, text: str, color: any = None, y: int = 0):
         """
         Draws a titlebar
         :param text: str title to display
         :param color: any color to use for text
-        :param background: any color to use for background
         :param y: int position on the y axis
         """
+        if not color:
+            color = settings.TEXT_COLOR
         self.centered_text(text, color=color, y=y, font_size=20, font_name=settings.BOLD_FONT)
         self.line((0, 25, self.framebuffer.size[0], 25), fill=color, width=5)
 
@@ -154,7 +155,8 @@ class AbstractApp:
         :return: None
         """
         if not self.image:
-            raise ValueError("self.image is None")
+            logging.error("App '{0}' called 'paste' without an image!".format(self.__module__))
+            self.blank()
         self.image.paste(image, position)
 
     def show(self):
