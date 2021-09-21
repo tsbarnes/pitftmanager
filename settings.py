@@ -14,6 +14,11 @@ except ImportError:
     FONT = "/usr/share/fonts/truetype/dejava/DejaVuSans.ttf"
 
 try:
+    from local_settings import BOLD_FONT
+except ImportError:
+    BOLD_FONT = "/usr/share/fonts/truetype/dejava/DejaVuSans-Bold.ttf"
+
+try:
     from local_settings import MONOSPACE_FONT
 except ImportError:
     MONOSPACE_FONT = "/usr/share/fonts/truetype/dejava/DejaVuSansMono.ttf"

@@ -98,22 +98,26 @@ class AbstractApp:
         """
         return self.text(text, position, font_name, font_size, color, wrap=True)
 
-    def centered_text(self, text: str, color: any = "white", y: int = 0, font_size: int = 20):
+    def centered_text(self, text: str, color: any = "white", y: int = 0,
+                      font_size: int = 20, font_name: str = None):
         """
         Draws text centered horizontally
         :param text: str text to be displayed
         :param color: any color to use for text
         :param y: vertical starting position
         :param font_size: size of font
+        :param font_name: name of font
         :return: None
         """
-        font = ImageFont.truetype(settings.FONT, font_size)
+        if not font_name:
+            font_name = settings.FONT
+        font = ImageFont.truetype(font_name, font_size)
         avg_char_width: int = sum(font.getsize(char)[0] for char in ascii_letters) / len(ascii_letters)
         number_of_lines = 0
         for line in text.split('\n'):
             centered_position = (self.image.size[0] / 2) - (avg_char_width * len(line) / 2)
             position = (centered_position, y + (number_of_lines * font_size))
-            self.text(text, color=color, font_size=font_size, position=position, wrap=False)
+            self.text(text, color=color, font_name=font_name, font_size=font_size, position=position, wrap=False)
             number_of_lines += 1
 
         return number_of_lines
@@ -139,7 +143,7 @@ class AbstractApp:
         :param background: any color to use for background
         :param y: int position on the y axis
         """
-        self.centered_text(text, color=color, y=y, font_size=20)
+        self.centered_text(text, color=color, y=y, font_size=20, font_name=settings.BOLD_FONT)
         self.line((0, 25, self.framebuffer.size[0], 25), fill=color, width=5)
 
     def paste_image(self, image, position=(5, 5)):

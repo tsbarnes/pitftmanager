@@ -15,6 +15,7 @@ import numpy
 import time
 import logging
 import threading
+import settings
 
 
 def _read_and_convert_to_ints(filename):
@@ -134,10 +135,13 @@ class Framebuffer(threading.Thread):
 
     def blank(self):
         self.image = Image.new("RGBA", self.size)
+        self.dirty = True
         self.redraw_screen()
 
-    def text(self, text, margin=5, font='/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf', fontsize=14,
+    def text(self, text, margin=5, font=None, fontsize=14,
              background_color=None, foreground_color="#FFFFFF", wrap=True):
+        if not font:
+            font = settings.FONT
         wrapped_text = ''
         if wrap:
             line_width = round(self.size[0] / (fontsize / 2))
