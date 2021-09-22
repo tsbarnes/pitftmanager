@@ -47,6 +47,7 @@ class PiTFTManager:
         signal.signal(signal.SIGHUP, self.quit)
 
         self.calendar.get_latest_events()
+        self.calendar.start()
         update_weather()
 
         app_names = settings.APPS
