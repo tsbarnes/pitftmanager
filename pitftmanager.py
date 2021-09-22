@@ -31,8 +31,6 @@ class PiTFTManager:
 
     def __init__(self):
         self.framebuffer.start()
-        self.calendar.start()
-        self.weather.start()
 
         image: Image = Image.open(settings.SPLASH_IMAGE)
         self.framebuffer.show(image.resize(self.framebuffer.size))
@@ -47,8 +45,9 @@ class PiTFTManager:
         signal.signal(signal.SIGHUP, self.quit)
 
         self.calendar.get_latest_events()
-        self.calendar.start()
         update_weather()
+        self.calendar.start()
+        self.weather.start()
 
         app_names = settings.APPS
         for name in app_names:
