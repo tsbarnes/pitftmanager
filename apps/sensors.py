@@ -1,9 +1,12 @@
 """Sensors screen"""
 from apps import AbstractApp
 import sensors
+from libs.system import System, get_system
 
 
 class App(AbstractApp):
+    system: System = get_system()
+
     def __init__(self, fb):
         """
         Initialize sensors library
@@ -15,10 +18,7 @@ class App(AbstractApp):
         self.blank()
         self.draw_titlebar("Sensors")
 
-        current_line = 0
-        for chip in sensors.iter_detected_chips():
-            current_line += self.text(chip.adapter_name, font_size=50, position=(5, 30 + current_line * 50))
+        text = "Temperature: " + str(self.system.temperature) + '\n'
+        text += "Voltage:     " + str(self.system.voltage)
 
-            for feature in chip:
-                line = "{}: {}".format(feature.label, feature.get_value())
-                current_line += self.text(line, font_size=50, color="yellow", position=(5, 30 + current_line * 50))
+        self.text(text, position=(5, 30))

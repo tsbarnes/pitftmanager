@@ -1,16 +1,14 @@
-import datetime
-import platform
-import time
 import humanize
 import logging
 import settings
-import distro
 from PIL import Image, ImageDraw, ImageFont
 from apps import AbstractApp
+from libs.system import System, get_system
 
 
 class App(AbstractApp):
     reload_interval = 5
+    system: System = get_system()
 
     def reload(self):
         self.blank()
@@ -19,23 +17,17 @@ class App(AbstractApp):
         draw: ImageDraw = ImageDraw.Draw(self.image)
         font: ImageFont = ImageFont.truetype(settings.MONOSPACE_FONT, 25)
 
-        text: str = ''
+        text: str = self.system.model + '\n'
 
-        with open('/sys/firmware/devicetree/base/model', 'r') as model_file:
-            model: str = model_file.read()
-            text += model + '\n'
+        text += 'System:  ' + self.system.system + '\n'
 
-        text += 'System:  ' + platform.system() + '\n'
+        text += 'OS:      ' + self.system.dist + '\n'
 
-        dist = "{0} {1}".format(distro.name(), distro.version())
-        text += 'OS:      ' + dist + '\n'
+        text += 'Machine: ' + self.system.machine + '\n'
+        text += 'Node:    ' + self.system.node + '\n'
+        text += 'Arch:    ' + self.system.arch + '\n'
 
-        text += 'Machine: ' + platform.machine() + '\n'
-        text += 'Node:    ' + platform.node() + '\n'
-        text += 'Arch:    ' + platform.architecture()[0] + '\n'
-
-        uptime: datetime.timedelta = datetime.timedelta(seconds=time.clock_gettime(time.CLOCK_BOOTTIME))
-        text += 'Uptime:  ' + humanize.naturaldelta(uptime)
+        text += 'Uptime:  ' + humanize.naturaldelta(self.system.uptime)
 
         draw.text((5, 120), text, font=font, fill=settings.TEXT_COLOR)
 
