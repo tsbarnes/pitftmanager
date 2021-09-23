@@ -70,7 +70,7 @@ class Calendar(threading.Thread):
             self.refresh_interval -= 1
             time.sleep(1)
             if self.refresh_interval < 1:
-                update_calendar()
+                self.get_latest_events()
                 self.refresh_interval = settings.CALENDAR_REFRESH
 
     def standardize_date(self, arg):

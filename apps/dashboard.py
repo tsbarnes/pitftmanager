@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from apps import AbstractApp
 from libs.calendar import Calendar, get_calendar, update_calendar
 from libs.weather import Weather, get_weather, update_weather
@@ -20,6 +21,9 @@ class App(AbstractApp):
 
         text = str(self.weather.weather.current.sky_text)
         self.text(text, font_size=20, position=(150, 35))
+
+        text = "{0}:{1}".format(datetime.now().hour, datetime.now().minute)
+        self.text(text, font_size=20, position=(350, 35))
 
         self.line((0, 80, self.image.size[0], 80), width=2)
 

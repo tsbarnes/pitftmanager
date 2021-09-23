@@ -31,7 +31,7 @@ class Weather(threading.Thread):
             time.sleep(1)
             if self.refresh_interval < 1:
                 self.loop.run_until_complete(self.update())
-                self.refresh_interval = settings.CALENDAR_REFRESH
+                self.refresh_interval = settings.WEATHER_REFRESH
 
     async def update(self):
         """
