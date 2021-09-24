@@ -34,6 +34,9 @@ class App(AbstractApp):
 
             text = str(self.calendar.events[0]['summary'])
             self.text(text, font_size=24, position=(5, 120), max_lines=2)
+        else:
+            text = "No calendar events"
+            self.centered_text(text, y=100)
 
         self.line((0, 190, self.image.size[0], 190), width=2)
 
@@ -43,6 +46,9 @@ class App(AbstractApp):
             if self.calendar.tasks[0].get('due'):
                 text = ' - Due: ' + self.calendar.humanized_datetime(self.calendar.tasks[0]['due'])
                 self.text(text, font_size=24, position=(5, 230), color="yellow", max_lines=1)
+        else:
+            text = "No current tasks"
+            self.centered_text(text, y=210)
 
     def touch(self, position: tuple):
         if position[1] in range(0, 70):
