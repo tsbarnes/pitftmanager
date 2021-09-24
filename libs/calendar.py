@@ -246,7 +246,9 @@ class Calendar(threading.Thread):
             obj = self.timezone.localize(dt)
         except ValueError:
             obj = dt
-        if obj.date() > datetime.today().date():
+        except AttributeError:
+            obj = dt
+        if (isinstance(obj, date) and not isinstance(obj, datetime)) or obj.date() > datetime.today().date():
             return humanize.naturaldate(obj)
         else:
             return humanize.naturaltime(obj, when=datetime.now(self.timezone))
