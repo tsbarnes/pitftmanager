@@ -22,5 +22,6 @@ class App(AbstractApp):
 
             logging.debug("Sky Code: " + str(self.weather.weather.current.sky_code))
         except AttributeError:
+            self.blank()
             text = "No weather information"
             self.centered_text(text, font_size=30, y=120)
