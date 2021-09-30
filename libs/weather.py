@@ -2,6 +2,7 @@ import threading
 import time
 import python_weather
 import asyncio
+import xml
 import logging
 import settings
 from PIL import Image
@@ -30,7 +31,10 @@ class Weather(threading.Thread):
             self.refresh_interval -= 1
             time.sleep(1)
             if self.refresh_interval < 1:
-                self.loop.run_until_complete(self.update())
+                try:
+                    self.loop.run_until_complete(self.update())
+                except xml.parsers.expat.ExpatError as error:
+                    logging.warning(error)
                 self.refresh_interval = settings.WEATHER_REFRESH
 
     async def update(self):
@@ -51,6 +55,12 @@ class Weather(threading.Thread):
         # For now it just uses the sun icon for all weather
         if self.weather.current.sky_code == 0:
             return Image.open("images/sun.png")
+        elif self.weather.current.sky_code == 26:
+            return Image.open("images/cloud.png")
+        elif self.weather.current.sky_code == 28:
+            return Image.open("images/cloud.png")
+        elif self.weather.current.sky_code == 30:
+            return Image.open("images/cloud_sun.png")
         else:
             logging.warning("Unable to find icon for sky code: {}".format(self.weather.current.sky_code))
             return Image.open("images/sun.png")
