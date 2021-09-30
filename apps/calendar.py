@@ -17,6 +17,7 @@ class App(AbstractApp):
         current_line = 0
         for event in self.calendar.events:
             text = ' -- ' + self.calendar.humanized_datetime(event['start']) + ' -- '
-            current_line += self.text(text, font_size=24, position=(5, 30 + current_line * 24), max_lines=1)
+            current_line += self.centered_text(text, font_size=24, color="yellow",
+                                               y=30 + current_line * 24, max_lines=1)
             text = str(event['summary'])
             current_line += self.text(text, font_size=24, position=(5, 30 + current_line * 24), max_lines=2)

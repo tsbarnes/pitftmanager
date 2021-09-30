@@ -99,7 +99,7 @@ class AbstractApp:
         return self.text(text, position, font_name, font_size, color, wrap=True)
 
     def centered_text(self, text: str, color: any = "white", y: int = 0,
-                      font_size: int = 20, font_name: str = None):
+                      font_size: int = 20, font_name: str = None, max_lines: int = -1):
         """
         Draws text centered horizontally
         :param text: str text to be displayed
@@ -107,6 +107,7 @@ class AbstractApp:
         :param y: vertical starting position
         :param font_size: size of font
         :param font_name: name of font
+        :param max_lines: maximum number of lines to show, -1 for no limit
         :return: None
         """
         if not font_name:
@@ -115,10 +116,11 @@ class AbstractApp:
         avg_char_width: int = sum(font.getsize(char)[0] for char in ascii_letters) / len(ascii_letters)
         number_of_lines = 0
         for line in text.split('\n'):
-            centered_position = (self.image.size[0] / 2) - (avg_char_width * len(line) / 2)
-            position = (centered_position, y + (number_of_lines * font_size))
-            self.text(text, color=color, font_name=font_name, font_size=font_size, position=position, wrap=False)
-            number_of_lines += 1
+            if number_of_lines < max_lines or max_lines == -1:
+                centered_position = (self.image.size[0] / 2) - (avg_char_width * len(line) / 2)
+                position = (centered_position, y + (number_of_lines * font_size))
+                self.text(text, color=color, font_name=font_name, font_size=font_size, position=position, wrap=False)
+                number_of_lines += 1
 
         return number_of_lines
 
