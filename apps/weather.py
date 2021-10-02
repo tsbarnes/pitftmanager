@@ -11,6 +11,9 @@ class App(AbstractApp):
         self.draw_titlebar("Weather")
 
         try:
+            logo = self.weather.get_icon()
+            self.image.paste(logo, (60, 55))
+
             text = str(self.weather.weather.current.temperature) + '°'
             self.centered_text(text, font_size=80, y=30)
 
