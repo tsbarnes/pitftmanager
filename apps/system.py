@@ -15,19 +15,19 @@ class App(AbstractApp):
         self.draw_titlebar("System")
 
         draw: ImageDraw = ImageDraw.Draw(self.image)
-        font: ImageFont = ImageFont.truetype(settings.MONOSPACE_FONT, 25)
+        font: ImageFont = ImageFont.truetype(settings.MONOSPACE_FONT, 24)
 
         text: str = self.system.model + '\n'
 
-        text += 'System:  ' + self.system.system + '\n'
+        text += 'OS:       ' + self.system.dist + '\n'
 
-        text += 'OS:      ' + self.system.dist + '\n'
+        text += 'Machine:  ' + self.system.machine + '\n'
+        text += 'CPU Temp: ' + str(round(self.system.temperature)) + '°C\n'
 
-        text += 'Machine: ' + self.system.machine + '\n'
-        text += 'Node:    ' + self.system.node + '\n'
-        text += 'Arch:    ' + self.system.arch + '\n'
+        text += 'Node:     ' + self.system.node + '\n'
+        text += 'Local IP: ' + self.system.local_ipv4_address + '\n'
 
-        text += 'Uptime:  ' + humanize.naturaldelta(self.system.uptime)
+        text += 'Uptime:   ' + humanize.naturaldelta(self.system.uptime)
 
         draw.text((5, 120), text, font=font, fill=settings.TEXT_COLOR)
 
