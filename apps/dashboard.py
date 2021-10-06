@@ -41,11 +41,12 @@ class App(AbstractApp):
         self.line((0, 190, self.image.size[0], 190), width=2)
 
         if len(self.calendar.tasks) > 0:
-            text = str(self.calendar.tasks[0]['summary'])
-            self.text(text, font_size=24, position=(5, 200), max_lines=2)
+            current_line = 0
             if self.calendar.tasks[0].get('due'):
                 text = ' - Due: ' + self.calendar.humanized_datetime(self.calendar.tasks[0]['due'])
-                self.text(text, font_size=24, position=(5, 230), color="yellow", max_lines=1)
+                current_line += self.text(text, font_size=24, position=(5, 200), color="yellow", max_lines=1)
+            text = str(self.calendar.tasks[0]['summary'])
+            self.text(text, font_size=24, position=(5, 200 + current_line * 30), max_lines=2)
         else:
             text = "No current tasks"
             self.centered_text(text, y=210)

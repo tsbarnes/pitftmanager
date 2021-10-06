@@ -1,6 +1,6 @@
 from apps import AbstractApp
 import logging
-from libs.weather import Weather, get_weather, update_weather
+from libs.weather import Weather, get_weather
 
 
 class App(AbstractApp):

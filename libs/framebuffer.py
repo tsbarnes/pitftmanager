@@ -13,7 +13,6 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFont
 import numpy
 import time
-import logging
 import threading
 import settings
 

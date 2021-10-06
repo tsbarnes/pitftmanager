@@ -9,12 +9,7 @@ except ImportError:
     print("Evdev package is not installed.  Run 'pip3 install evdev' or 'pip install evdev' (Python 2.7) to install.")
     raise(ImportError("Evdev package not found."))
 import threading
-try:
-    # python 3.5+
-    import queue
-except ImportError:
-    # python 2.7
-    import Queue as queue
+import queue
 
 
 # Class for handling events from piTFT
@@ -121,11 +116,11 @@ def get_pixels_from_coordinates(framebuffer, coords):
     tft_delta = (tft_end[0] - tft_orig[0], tft_end[1] - tft_orig[1])
     tft_abs_delta = (abs(tft_end[0] - tft_orig[0]), abs(tft_end[1] - tft_orig[1]))
 
-    if tft_delta [0] < 0:
+    if tft_delta[0] < 0:
         y = float(tft_abs_delta[0] - coords[0] + tft_end[0]) / float(tft_abs_delta[0]) * float(surface_size[0])
     else:
         y = float(coords[0] - tft_orig[0]) / float(tft_abs_delta[0]) * float(surface_size[0])
-    if tft_delta [1] < 0:
+    if tft_delta[1] < 0:
         x = float(tft_abs_delta[1] - coords[1] + tft_end[1]) / float(tft_abs_delta[1]) * float(surface_size[1])
     else:
         x = float(coords[1] - tft_orig[1]) / float(tft_abs_delta[1]) * float(surface_size[1])

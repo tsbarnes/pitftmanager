@@ -21,7 +21,7 @@ timezone = pytz.timezone(TIMEZONE)
 def sort_by_date(obj: dict):
     """
     Sort the events or tasks by date
-    :param obj: dict containing sumary and start/due date
+    :param obj: dict containing summary and start/due date
     :return: the same object, with time added if needed
     """
     if obj.get("start"):

@@ -1,4 +1,3 @@
-import logging
 from apps import AbstractApp
 from libs.calendar import Calendar, get_calendar
 
