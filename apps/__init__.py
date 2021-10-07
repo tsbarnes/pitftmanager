@@ -137,17 +137,28 @@ class AbstractApp:
         draw = ImageDraw.Draw(self.image)
         draw.line(position, fill, width)
 
-    def draw_titlebar(self, text: str, color: any = None, y: int = 0):
+    def rectangle(self, position: tuple, fill: any = None, outline: any = None, width: int = 0):
+        if not fill:
+            fill = settings.BACKGROUND_COLOR
+        if not outline:
+            outline = settings.TEXT_COLOR
+        draw = ImageDraw.Draw(self.image)
+        draw.rectangle(position, fill, outline, width)
+
+    def draw_titlebar(self, text: str, color: any = None, fill: any = None, y: int = 0):
         """
         Draws a titlebar
         :param text: str title to display
         :param color: any color to use for text
+        :param fill: any color to use for background fill
         :param y: int position on the y axis
         """
         if not color:
             color = settings.TEXT_COLOR
+        if not fill:
+            fill = settings.BACKGROUND_COLOR
+        self.rectangle(position=(0, 0, self.framebuffer.size[0], 25), fill=fill, outline=color, width=2)
         self.centered_text(text, color=color, y=y, font_size=20, font_name=settings.BOLD_FONT)
-        self.line((0, 25, self.framebuffer.size[0], 25), fill=color, width=5)
 
     def paste_image(self, image, position=(5, 5)):
         """
