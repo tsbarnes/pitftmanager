@@ -4,8 +4,23 @@ import python_weather
 import asyncio
 import xml
 import logging
-import settings
 from PIL import Image
+
+
+try:
+    from local_settings import WEATHER_FORMAT
+except ImportError:
+    WEATHER_FORMAT = python_weather.IMPERIAL
+
+try:
+    from local_settings import WEATHER_CITY
+except ImportError:
+    WEATHER_CITY = "Richmond, VA"
+
+try:
+    from local_settings import WEATHER_REFRESH
+except ImportError:
+    WEATHER_REFRESH = 900
 
 
 class Weather(threading.Thread):
@@ -13,7 +28,7 @@ class Weather(threading.Thread):
     This class provides access to the weather info
     """
     weather = None
-    refresh_interval: int = settings.WEATHER_REFRESH
+    refresh_interval: int = WEATHER_REFRESH
     loop = asyncio.get_event_loop()
 
     def __init__(self):
@@ -35,15 +50,15 @@ class Weather(threading.Thread):
                     self.loop.run_until_complete(self.update())
                 except xml.parsers.expat.ExpatError as error:
                     logging.warning(error)
-                self.refresh_interval = settings.WEATHER_REFRESH
+                self.refresh_interval = WEATHER_REFRESH
 
     async def update(self):
         """
         Update the weather info
         :return: None
         """
-        client = python_weather.Client(format=settings.WEATHER_FORMAT)
-        self.weather = await client.find(settings.WEATHER_CITY)
+        client = python_weather.Client(format=WEATHER_FORMAT)
+        self.weather = await client.find(WEATHER_CITY)
         await client.close()
 
     def get_icon(self):

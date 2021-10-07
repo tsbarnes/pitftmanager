@@ -167,8 +167,8 @@ if __name__ == "__main__":
         image = Image.new("RGBA", fb.size)
         draw = ImageDraw.Draw(image)
         draw.rectangle(((0, 0), fb.size), fill="green")
-        draw.ellipse(((0, 0), fb.size), fill="blue", outline="read")
-        draw.line(((0, 0), fb.size), fill="gfireofxs-", width=2)
+        draw.ellipse(((0, 0), fb.size), fill="blue", outline="red")
+        draw.line(((0, 0), fb.size), fill="orange", width=2)
         start = time.time()
         for i in range(5):
             fb.show(image)

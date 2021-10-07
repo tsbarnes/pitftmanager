@@ -13,7 +13,18 @@ from icalevents.icalevents import events
 from requests.exceptions import SSLError
 
 import settings
-from settings import CALENDAR_URLS, TIMEZONE
+from settings import TIMEZONE
+
+
+try:
+    from local_settings import CALENDAR_URLS
+except ImportError:
+    CALENDAR_URLS = None
+
+try:
+    from local_settings import CALENDAR_REFRESH
+except ImportError:
+    CALENDAR_REFRESH = 900
 
 timezone = pytz.timezone(TIMEZONE)
 
@@ -47,7 +58,7 @@ class Calendar(threading.Thread):
     This class handles the calendar events and tasks
     """
     timezone = None
-    refresh_interval: int = settings.CALENDAR_REFRESH
+    refresh_interval: int = CALENDAR_REFRESH
     events: list = []
     tasks: list = []
 
@@ -71,7 +82,7 @@ class Calendar(threading.Thread):
             time.sleep(1)
             if self.refresh_interval < 1:
                 self.get_latest_events()
-                self.refresh_interval = settings.CALENDAR_REFRESH
+                self.refresh_interval = CALENDAR_REFRESH
 
     def standardize_date(self, arg):
         """
