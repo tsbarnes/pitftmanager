@@ -27,7 +27,7 @@ except ImportError:
     CALENDAR_REFRESH = 900
 
 timezone = pytz.timezone(TIMEZONE)
-logger = logger.getLogger('pitftmanager.libs.calendar')
+logger = logging.getLogger('pitftmanager.libs.calendar')
 
 
 def sort_by_date(obj: dict):
