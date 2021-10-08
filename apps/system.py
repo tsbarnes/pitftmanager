@@ -6,6 +6,9 @@ from apps import AbstractApp
 from libs.system import System, get_system
 
 
+logger = logging.getLogger("pitftmanager.apps.system")
+
+
 class App(AbstractApp):
     reload_interval = 5
     system: System = get_system()
@@ -39,15 +42,15 @@ class App(AbstractApp):
         try:
             self.image.paste(logo, box)
         except ValueError:
-            logging.error("Failed to paste image")
+            logger.error("Failed to paste image")
 
     def touch(self, position: tuple):
         if position[1] < 50:
-            logging.debug("Top of screen touched")
+            logger.debug("Top of screen touched")
         if position[1] > self.framebuffer.size[1] - 50:
-            logging.debug("Bottom of screen touched")
+            logger.debug("Bottom of screen touched")
         if position[0] < 50:
-            logging.debug("Left of screen touched")
+            logger.debug("Left of screen touched")
         if position[0] > self.framebuffer.size[0] - 50:
-            logging.debug("Right of screen touched")
-        logging.debug("System app caught touch: {}".format(position))
+            logger.debug("Right of screen touched")
+        logger.debug("System app caught touch: {}".format(position))

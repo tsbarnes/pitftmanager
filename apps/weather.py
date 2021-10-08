@@ -3,6 +3,9 @@ import logging
 from libs.weather import Weather, get_weather
 
 
+logger = logging.getLogger("pitftmanager.apps.weather")
+
+
 class App(AbstractApp):
     weather: Weather = get_weather()
 
@@ -23,7 +26,7 @@ class App(AbstractApp):
             text = str(self.weather.weather.location_name)
             self.centered_text(text, font_size=40, y=170)
 
-            logging.debug("Sky Code: " + str(self.weather.weather.current.sky_code))
+            logger.debug("Sky Code: " + str(self.weather.weather.current.sky_code))
         except AttributeError:
             self.blank()
             text = "No weather information"

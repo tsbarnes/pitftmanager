@@ -12,6 +12,9 @@ import settings
 from libs.framebuffer import Framebuffer
 
 
+logger = logging.getLogger("pitftmanager.apps")
+
+
 class AbstractApp:
     """
     Abstract class for apps
@@ -168,7 +171,7 @@ class AbstractApp:
         :return: None
         """
         if not self.image:
-            logging.error("App '{0}' called 'paste' without an image!".format(self.__module__))
+            logger.error("App '{0}' called 'paste' without an image!".format(self.__module__))
             self.blank()
         self.image.paste(image, position)
 
@@ -178,11 +181,11 @@ class AbstractApp:
         :return: None
         """
         if not self.image:
-            logging.error("App '{0}' called 'show' without an image!".format(self.__module__))
+            logger.error("App '{0}' called 'show' without an image!".format(self.__module__))
             self.blank()
         if settings.SAVE_SCREENSHOTS:
             filename = '/tmp/{0}-{1}.png'.format(self.__module__, uuid.uuid4())
-            logging.debug("Saving screenshot to {}".format(filename))
+            logger.debug("Saving screenshot to {}".format(filename))
             self.image.save(filename)
         self.framebuffer.show(self.image)
 
@@ -199,7 +202,7 @@ class AbstractApp:
         :param position: tuple where the screen was touched
         :return: None
         """
-        logging.debug("Unhandled PiTFT touch event: {}".format(position))
+        logger.debug("Unhandled PiTFT touch event: {}".format(position))
 
     def run_iteration(self):
         """
@@ -209,7 +212,7 @@ class AbstractApp:
         self.reload_wait += 1
         if not self.image or self.reload_wait >= self.reload_interval:
             if self.image:
-                logging.debug("App '{0}' hit auto-reload interval ({1} seconds)".format(
+                logger.debug("App '{0}' hit auto-reload interval ({1} seconds)".format(
                     type(self).__module__, self.reload_interval))
             self.reload_wait = 0
             self.reload()
@@ -229,7 +232,7 @@ def get_apps():
         if file.name == "__init__.py":
             continue
         module_name = file.name.split(".")[0]
-        logging.debug("Found '{0}' in '{1}'".format(module_name, path))
+        logger.debug("Found '{0}' in '{1}'".format(module_name, path))
         apps.append(module_name)
 
     return apps

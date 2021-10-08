@@ -1,4 +1,3 @@
-import logging
 from apps import AbstractApp
 from libs.calendar import Calendar, get_calendar
 
@@ -19,7 +18,6 @@ class App(AbstractApp):
         for task in self.calendar.tasks:
             text = str(task['summary'].strip('\n'))
             current_line += self.text(text, font_size=24, position=(5, 30 + current_line * 24), max_lines=2)
-            logging.debug("Task found: {}".format(text))
             if task.get('due'):
                 text = ' -- Due: ' + self.calendar.humanized_datetime(task['due'])
                 current_line += self.text(text, font_size=24, position=(5, 30 + current_line * 24), max_lines=1)

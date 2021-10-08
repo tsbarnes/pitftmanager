@@ -5,6 +5,9 @@ from libs.calendar import Calendar, get_calendar, update_calendar
 from libs.weather import Weather, get_weather, update_weather
 
 
+logger = logging.getLogger("pitftmanager.apps.dashboard")
+
+
 class App(AbstractApp):
     calendar: Calendar = get_calendar()
     weather: Weather = get_weather()
@@ -53,7 +56,7 @@ class App(AbstractApp):
 
     def touch(self, position: tuple):
         if position[1] in range(0, 70):
-            logging.debug("Weather touched")
+            logger.debug("Weather touched")
             self.blank()
             self.centered_text("Please wait...", font_size=50, y=50)
             self.show()
@@ -61,11 +64,11 @@ class App(AbstractApp):
             self.reload()
             self.show()
         elif position[1] in range(70, 180):
-            logging.debug("Calendar touched")
+            logger.debug("Calendar touched")
             self.blank()
             self.centered_text("Please wait...", font_size=50, y=50)
             self.show()
             update_calendar()
             self.reload()
             self.show()
-        logging.debug("Position {} touched".format(position))
+        logger.debug("Position {} touched".format(position))
