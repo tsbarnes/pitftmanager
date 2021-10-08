@@ -15,6 +15,9 @@ except ImportError:
     NETWORK_INTERFACE = "wlan0"
 
 
+logger = logging.getLogger("pitftmanager.libs.system")
+
+
 class System:
     """
     This class provides access to system information
@@ -31,9 +34,9 @@ class System:
                 elif str(chip) == "rpi_volt-isa-0000" and feature.label == "in0":
                     self.voltage_sensor = feature
         if not self.temperature_sensor:
-            logging.warning("Couldn't find temperature sensor")
+            logger.warning("Couldn't find temperature sensor")
         if not self.voltage_sensor:
-            logging.warning("Couldn't find voltage sensor")
+            logger.warning("Couldn't find voltage sensor")
 
     @staticmethod
     def get_size(data, suffix="B"):
@@ -132,4 +135,4 @@ def get_system():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    logging.info("Local IPv4 address: {}".format(system.local_ipv4_address))
+    logger.info("Local IPv4 address: {}".format(system.local_ipv4_address))

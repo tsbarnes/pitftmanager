@@ -27,6 +27,7 @@ except ImportError:
     CALENDAR_REFRESH = 900
 
 timezone = pytz.timezone(TIMEZONE)
+logger = logger.getLogger('pitftmanager.libs.calendar')
 
 
 def sort_by_date(obj: dict):
@@ -91,10 +92,10 @@ class Calendar(threading.Thread):
         :return: a new datetime object, or the same object if no changes were needed
         """
         if isinstance(arg, datetime) and not arg.tzinfo:
-            logging.debug("Object has no timezone")
+            logger.debug("Object has no timezone")
             return self.timezone.localize(arg)
         elif isinstance(arg, date) and not isinstance(arg, datetime):
-            logging.debug("Object has no time")
+            logger.debug("Object has no time")
             return datetime.combine(arg, datetime.min.time(), self.timezone)
         else:
             return arg
@@ -116,12 +117,12 @@ class Calendar(threading.Thread):
                     'summary': summary
                 })
         except ValueError as error:
-            logging.error('Error reading calendar "{0}"'.format(url))
-            logging.error(error)
+            logger.error('Error reading calendar "{0}"'.format(url))
+            logger.error(error)
             pass
         except httplib2.error.ServerNotFoundError as error:
-            logging.error('Error reading calendar "{0}"'.format(url))
-            logging.error(error)
+            logger.error('Error reading calendar "{0}"'.format(url))
+            logger.error(error)
             pass
 
     def get_events_from_caldav(self, new_events, new_tasks, url, username, password):
@@ -138,20 +139,20 @@ class Calendar(threading.Thread):
             client = caldav.DAVClient(url=url, username=username, password=password)
             principal = client.principal()
         except SSLError as error:
-            logging.error("SSL error connecting to CalDAV server")
-            logging.error(error)
+            logger.error("SSL error connecting to CalDAV server")
+            logger.error(error)
             return
         except urllib3.exceptions.NewConnectionError as error:
-            logging.error("Error establishing connection to '{}'".format(url))
-            logging.error(error)
+            logger.error("Error establishing connection to '{}'".format(url))
+            logger.error(error)
             return
         except caldav.lib.error.AuthorizationError as error:
-            logging.error("Authorization error connecting to '{}'".format(url))
-            logging.error(error)
+            logger.error("Authorization error connecting to '{}'".format(url))
+            logger.error(error)
             return
         except requests.exceptions.ConnectionError as error:
-            logging.error("SSL error connecting to CalDAV server")
-            logging.error(error)
+            logger.error("SSL error connecting to CalDAV server")
+            logger.error(error)
             return
 
         calendars = principal.calendars()
@@ -188,7 +189,7 @@ class Calendar(threading.Thread):
         """
         Update events and tasks
         """
-        logging.debug("Started reading calendars...")
+        logger.debug("Started reading calendars...")
         new_events = []
         new_tasks = []
 
@@ -197,25 +198,25 @@ class Calendar(threading.Thread):
                 try:
                     self.get_events_from_webcal(new_events, connection["url"])
                 except KeyError as error:
-                    logging.error("No URL specified for calendar")
-                    logging.error(error)
+                    logger.error("No URL specified for calendar")
+                    logger.error(error)
             elif str(connection['type']).lower() == 'caldav':
                 try:
                     self.get_events_from_caldav(new_events, new_tasks, connection["url"],
                                                 connection["username"], connection["password"])
                 except KeyError as error:
                     if connection.get('url'):
-                        logging.error("Error reading calendar: {}".format(connection['url']))
+                        logger.error("Error reading calendar: {}".format(connection['url']))
                     else:
-                        logging.error("No URL specified for calendar")
-                    logging.error(error)
+                        logger.error("No URL specified for calendar")
+                    logger.error(error)
             else:
-                logging.error("calendar type not recognized: {0}".format(str(connection["type"])))
+                logger.error("calendar type not recognized: {0}".format(str(connection["type"])))
 
         new_events.sort(key=sort_by_date)
         new_tasks.sort(key=sort_by_date)
 
-        logging.debug("done!")
+        logger.debug("done!")
 
         self.events = new_events
         self.tasks = new_tasks
@@ -282,3 +283,11 @@ def update_calendar():
     :return: None
     """
     calendar.refresh_interval = 0
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    calendar.get_latest_events()
+    for event in calendar.events:
+        logger.info(event.start)
+        logger.info(event.summary)

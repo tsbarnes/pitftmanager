@@ -23,6 +23,9 @@ except ImportError:
     WEATHER_REFRESH = 900
 
 
+logger = logging.getLogger("pitftmanager.libs.weather")
+
+
 class Weather(threading.Thread):
     """
     This class provides access to the weather info
@@ -49,7 +52,7 @@ class Weather(threading.Thread):
                 try:
                     self.loop.run_until_complete(self.update())
                 except xml.parsers.expat.ExpatError as error:
-                    logging.warning(error)
+                    logger.warning(error)
                 self.refresh_interval = WEATHER_REFRESH
 
     async def update(self):
@@ -84,7 +87,7 @@ class Weather(threading.Thread):
             image = Image.open("images/sun.png")
             return image.resize((32, 32))
         else:
-            logging.warning("Unable to find icon for sky code: {}".format(self.weather.current.sky_code))
+            logger.warning("Unable to find icon for sky code: {}".format(self.weather.current.sky_code))
             image = Image.open("images/sun.png")
             return image.resize((32, 32))
 
