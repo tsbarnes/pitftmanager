@@ -15,6 +15,9 @@ from libs.weather import Weather, get_weather, update_weather
 from libs.pitfttouchscreen import PiTFTTouchscreen, get_pixels_from_coordinates
 
 
+logger = logging.getLogger("pitftmanager")
+
+
 class PiTFTManager:
     framebuffer: Framebuffer = Framebuffer(1)
     app_modules: list = []
@@ -54,7 +57,7 @@ class PiTFTManager:
             self.load_app(name)
 
         if len(self.app_modules) < 1:
-            logging.error("No apps found, exiting...")
+            logger.error("No apps found, exiting...")
             sys.exit(1)
 
         for module in self.app_modules:
@@ -63,10 +66,10 @@ class PiTFTManager:
 
         self.switch_app(0)
 
-        logging.info("PiTFT Size: {0}x{1}".format(self.framebuffer.size[0], self.framebuffer.size[1]))
+        logger.info("PiTFT Size: {0}x{1}".format(self.framebuffer.size[0], self.framebuffer.size[1]))
 
     def quit(self, *args):
-        logging.info("PiTFT Manager quitting gracefully...")
+        logger.info("PiTFT Manager quitting gracefully...")
         self.framebuffer.blank()
         exit(0)
 
@@ -79,7 +82,7 @@ class PiTFTManager:
                 module = importlib.import_module(name)
                 self.app_modules.append(module)
             except ImportError:
-                logging.error("Couldn't load app '{0}'" % name)
+                logger.error("Couldn't load app '{0}'" % name)
 
     def switch_app(self, index: int):
         self.current_app_index = index % len(self.apps)
@@ -96,7 +99,7 @@ class PiTFTManager:
             index += 1
 
         if index >= len(self.apps):
-            logging.error("App '{0}' not found")
+            logger.error("App '{0}' not found")
             return
 
         self.current_app_index = index % len(self.apps)
@@ -121,7 +124,7 @@ class PiTFTManager:
                 command = parts[0]
                 args = " ".join(parts[1:])
 
-                logging.info("Received IPC command: " + command)
+                logger.info("Received IPC command: " + command)
 
                 if command == "previous":
                     self.previous_app()
@@ -132,16 +135,16 @@ class PiTFTManager:
                 elif command == "reload":
                     self.current_app.reload()
                 elif command == "exit":
-                    logging.info("Got 'exit' command, quitting...")
+                    logger.info("Got 'exit' command, quitting...")
                     sys.exit(0)
                 elif command == "load_app":
-                    logging.info("Loading app '{0}'...".format(parts[1]))
+                    logger.info("Loading app '{0}'...".format(parts[1]))
                     self.load_app(parts[1])
                 elif command == "remove_app":
-                    logging.info("Removing app '{0}'...".format(parts[1]))
+                    logger.info("Removing app '{0}'...".format(parts[1]))
                     raise NotImplementedError()
                 else:
-                    logging.warning("Unrecognized command: " + command)
+                    logger.warning("Unrecognized command: " + command)
 
             while not self.pitft_touchscreen.queue_empty():
                 for event in self.pitft_touchscreen.get_event():
@@ -175,9 +178,9 @@ class PiTFTManager:
 
 
 if __name__ == '__main__':
-    print("Starting PiTFT Manager...")
-    print("Log Level: " + logging.getLevelName(settings.LOGLEVEL))
     logging.basicConfig(level=settings.LOGLEVEL)
+    logger.info("Starting PiTFT Manager...")
+    logger.info("Log Level: " + logging.getLevelName(settings.LOGLEVEL))
 
     app = PiTFTManager()
     app.main_loop()
