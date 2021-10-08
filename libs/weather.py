@@ -110,3 +110,9 @@ def update_weather():
     """
     loop = asyncio.get_event_loop()
     loop.run_until_complete(weather.update())
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    update_weather()
+    logger.info(weather.weather.current.sky_text)

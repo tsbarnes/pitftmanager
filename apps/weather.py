@@ -20,7 +20,7 @@ class App(AbstractApp):
             text = str(self.weather.weather.current.sky_text)
             self.centered_text(text, font_size=40, y=120)
 
-            text = str(self.weather.weather.current.day)
+            text = str(self.weather.weather.location_name)
             self.centered_text(text, font_size=40, y=170)
 
             logging.debug("Sky Code: " + str(self.weather.weather.current.sky_code))
