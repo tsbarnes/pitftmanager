@@ -109,7 +109,6 @@ class Framebuffer(threading.Thread):
 
     def redraw_screen(self):
         if self.dirty:
-            # logging.debug(_CONVERTER[(self.image.mode, self.bits_per_pixel)])
             converter = _CONVERTER[(self.image.mode, self.bits_per_pixel)]
             assert self.image.size == self.size
             out = converter(self.image)
