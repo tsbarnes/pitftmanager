@@ -45,7 +45,6 @@ class PiTFTManager:
 
         signal.signal(signal.SIGINT, self.quit)
         signal.signal(signal.SIGTERM, self.quit)
-        signal.signal(signal.SIGHUP, self.quit)
 
         self.calendar.get_latest_events()
         update_weather()
@@ -71,6 +70,8 @@ class PiTFTManager:
     def quit(self, *args):
         logger.info("PiTFT Manager quitting gracefully...")
         self.framebuffer.blank()
+        self.calendar.join()
+        self.weather.join()
         self.framebuffer.join()
         exit(0)
 

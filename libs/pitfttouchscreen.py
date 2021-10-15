@@ -10,6 +10,12 @@ except ImportError:
     raise(ImportError("Evdev package not found."))
 import threading
 import queue
+import logging
+
+from settings import ROTATION
+
+
+logger = logging.getLogger("pitftmanager.libs.pitfttouchscreen")
 
 
 # Class for handling events from piTFT
@@ -111,8 +117,17 @@ class PiTFTTouchscreen(threading.Thread):
 # Here we convert the evdev "hardware" touch coordinates into pygame surface pixel coordinates
 def get_pixels_from_coordinates(framebuffer, coords):
     surface_size = (framebuffer.size[1], framebuffer.size[0])
-    tft_orig = (3750, 180)
-    tft_end = (150, 3750)
+    if ROTATION == 90:
+        tft_orig = (3750, 180)
+        tft_end = (150, 3750)
+    elif ROTATION == 270:
+        tft_orig = (150, 3750)
+        tft_end = (3750, 180)
+    else:
+        logger.error("Invalid rotation")
+        tft_orig = (150, 3750)
+        tft_end = (3750, 180)
+
     tft_delta = (tft_end[0] - tft_orig[0], tft_end[1] - tft_orig[1])
     tft_abs_delta = (abs(tft_end[0] - tft_orig[0]), abs(tft_end[1] - tft_orig[1]))
 

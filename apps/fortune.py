@@ -11,7 +11,7 @@ class App(AbstractApp):
         self.blank()
         self.draw_titlebar("Fortune")
         try:
-            child = subprocess.Popen(['/usr/games/fortune'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            child = subprocess.Popen(['fortune'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             self.output = child.stdout.read().decode().replace('\n', ' ')
         except OSError:
             logging.error("couldn't run application 'fortune'")
