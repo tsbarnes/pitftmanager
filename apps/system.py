@@ -34,7 +34,7 @@ class App(AbstractApp):
 
         draw.text((5, 120), text, font=font, fill=settings.TEXT_COLOR)
 
-        logo: Image = Image.open('images/raspberry-pi.png')
+        logo: Image = Image.open(self.system.icon)
         logo.thumbnail((80, 80))
         centered_position: int = round(self.framebuffer.size[0] / 2 - 40)
         box: tuple = (centered_position, 30)

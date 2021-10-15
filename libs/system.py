@@ -1,11 +1,11 @@
-import sensors
+import datetime
 import logging
-import distro
 import platform
 import time
-import datetime
-import psutil
 
+import distro
+import psutil
+import sensors
 
 try:
     # Try to load the network interface setting from local_settings.py
@@ -15,7 +15,7 @@ except ImportError:
     NETWORK_INTERFACE = "wlan0"
 
 
-logger = logging.getLogger("pitftmanager.libs.system")
+logger = logging.getLogger('epdtext.libs.system')
 
 
 class System:
@@ -95,26 +95,12 @@ class System:
     @property
     def network_total_sent(self):
         net_io = psutil.net_io_counters()
-        suffix = 'B'
-        if net_io > 1000000000:
-            suffix = 'G'
-        elif net_io > 1000000:
-            suffix = 'M'
-        elif net_io > 1000:
-            suffix = 'K'
-        return self.get_size(net_io.bytes_sent, suffix)
+        return self.get_size(net_io.bytes_sent)
 
     @property
     def network_total_received(self):
         net_io = psutil.net_io_counters()
-        suffix = 'B'
-        if net_io > 1000000000:
-            suffix = 'G'
-        elif net_io > 1000000:
-            suffix = 'M'
-        elif net_io > 1000:
-            suffix = 'K'
-        return self.get_size(net_io.bytes_recv, suffix)
+        return self.get_size(net_io.bytes_recv)
 
     @property
     def local_ipv4_address(self):
@@ -124,6 +110,12 @@ class System:
                     if str(address.family) == 'AddressFamily.AF_INET':
                         return address.address
         return None
+
+    @property
+    def icon(self):
+        if distro.name() == "Arch Linux ARM":
+            return "images/arch.png"
+        return "images/raspberry-pi.png"
 
 
 system = System()
@@ -135,4 +127,4 @@ def get_system():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    logger.info("Local IPv4 address: {}".format(system.local_ipv4_address))
+    logging.info("Local IPv4 address: {}".format(system.local_ipv4_address))

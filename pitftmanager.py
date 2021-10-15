@@ -71,6 +71,7 @@ class PiTFTManager:
     def quit(self, *args):
         logger.info("PiTFT Manager quitting gracefully...")
         self.framebuffer.blank()
+        self.framebuffer.join()
         exit(0)
 
     def load_app(self, name):
@@ -83,6 +84,22 @@ class PiTFTManager:
                 self.app_modules.append(module)
             except ImportError:
                 logger.error("Couldn't load app '{0}'" % name)
+
+    def remove_app(self, name):
+        index = 0
+        for app in self.apps:
+            if app.__module__ == name:
+                break
+            if app.__module__ == "apps." + name:
+                break
+            index += 1
+
+        if index >= len(self.apps):
+            logger.error("App '{0}' not found")
+            return
+
+        self.apps.pop(index)
+        self.app_modules.pop(index)
 
     def switch_app(self, index: int):
         self.current_app_index = index % len(self.apps)
@@ -142,7 +159,7 @@ class PiTFTManager:
                     self.load_app(parts[1])
                 elif command == "remove_app":
                     logger.info("Removing app '{0}'...".format(parts[1]))
-                    raise NotImplementedError()
+                    self.remove_app(parts[1])
                 else:
                     logger.warning("Unrecognized command: " + command)
 

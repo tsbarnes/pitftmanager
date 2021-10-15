@@ -15,6 +15,7 @@ try:
     mq = posix_ipc.MessageQueue("/pitftmanager_ipc")
     mq.block = False
 except posix_ipc.PermissionsError:
+    mq = None
     logger.error("couldn't open message queue")
     exit(1)
 
