@@ -13,12 +13,13 @@ The Adafruit PiTFT 3.5" is what I'm developing it on/for, so I chose to referenc
 
 ## What apps come with it?
 
-Right now, there are three included apps:
-
+* `dashboard` - displays weather, next calendar event, and next task due
 * `system` - displays system information
 * `fortune` - displays fortune cookies
   * Note: requires `fortune-mod` to be installed!
 * `affirmations` - displays positive affirmations
+* `calendar` and `tasks` - display events/tasks from webcal and caldav calendars
+* `weather` - displays the current weather
 
 ## Creating apps
 
@@ -30,10 +31,11 @@ More documentation for development coming soon.
 
 ## Installation
 
-* First, clone the repository onto the Raspberry Pi, I recommend cloning it to `/home/pi/pitftmanager` and then change directory into it.
+* First, clone the repository onto the Raspberry Pi, I recommend cloning it to `~/pitftmanager` and then change directory into it.
 * Second, install the required Python libraries.
-* Third, link the `pitftmanager.service` file into `/etc/systemd/system`.
-* Fourth, enable the `systemd` service.
+* Third, copy the `pitftmanager.service` file into `/etc/systemd/system`.
+* Fourth, edit the path in `/etc/systemd/system/pitftmanager.service` to the path where you checked out the code
+* Fifth, enable the `systemd` service.
 * Lastly, start the `systemd` service, or reboot.
 
 Quick command list to install:
@@ -42,7 +44,8 @@ Quick command list to install:
 git clone https://github.com/tsbarnes/pitftmanager.git ~/pitftmanager
 cd ~/pitftmanager
 sudo pip3 install -r requirements.txt
-sudo ln -s /home/pi/pitftmanager/pitftmanager.service /etc/systemd/system/
+sudo cp ~/pitftmanager/pitftmanager.service /etc/systemd/system/
+sudo nano /etc/systemd/system/pitftmanager.service  # don't forget to change the path!
 sudo systemctl daemon-reload
 sudo systemctl enable pitftmanager
 sudo systemctl start pitftmanager
