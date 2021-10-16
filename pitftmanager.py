@@ -10,7 +10,7 @@ from PIL import Image
 import settings
 from libs.framebuffer import Framebuffer
 from apps import AbstractApp
-from libs.calendar import Calendar, get_calendar
+from libs.calendar import Calendar, get_calendar, update_calendar
 from libs.weather import Weather, get_weather, update_weather
 from libs.pitfttouchscreen import PiTFTTouchscreen, get_pixels_from_coordinates
 
@@ -152,6 +152,10 @@ class PiTFTManager:
                     self.switch_app_by_name(args)
                 elif command == "reload":
                     self.current_app.reload()
+                elif command == "refresh_calendar":
+                    update_calendar()
+                elif command == "refresh_weather":
+                    update_weather()
                 elif command == "exit":
                     logger.info("Got 'exit' command, quitting...")
                     sys.exit(0)
