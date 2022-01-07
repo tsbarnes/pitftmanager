@@ -10,7 +10,6 @@ class App(AbstractApp):
         self.blank()
         self.draw_titlebar("Sensors")
 
-        text = "Temperature: " + str(self.system.temperature) + '\n'
-        text += "Voltage:     " + str(self.system.voltage)
+        text = "Temperature: " + str(self.system.temperature)
 
         self.text(text, position=(5, 30))

@@ -5,7 +5,6 @@ import time
 
 import distro
 import psutil
-import sensors
 
 try:
     # Try to load the network interface setting from local_settings.py
@@ -22,21 +21,6 @@ class System:
     """
     This class provides access to system information
     """
-    temperature_sensor = None
-    voltage_sensor = None
-
-    def __init__(self):
-        sensors.init()
-        for chip in sensors.iter_detected_chips():
-            for feature in chip:
-                if str(chip) == "cpu_thermal-virtual-0" and feature.label == "temp1":
-                    self.temperature_sensor = feature
-                elif str(chip) == "rpi_volt-isa-0000" and feature.label == "in0":
-                    self.voltage_sensor = feature
-        if not self.temperature_sensor:
-            logger.warning("Couldn't find temperature sensor")
-        if not self.voltage_sensor:
-            logger.warning("Couldn't find voltage sensor")
 
     @staticmethod
     def get_size(data, suffix="B"):
@@ -57,11 +41,7 @@ class System:
 
     @property
     def temperature(self):
-        return self.temperature_sensor.get_value()
-
-    @property
-    def voltage(self):
-        return self.voltage_sensor.get_value()
+        return round(psutil.sensors_temperatures()['cpu_thermal'][0].current)
 
     @property
     def model(self):
