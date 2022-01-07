@@ -51,7 +51,7 @@ def sort_by_date(obj: dict):
             return timezone.localize(obj["due"])
         return obj["due"]
     else:
-        return datetime.max
+        return timezone.localize(datetime.max)
 
 
 class Calendar(threading.Thread):
