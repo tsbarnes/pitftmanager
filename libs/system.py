@@ -93,8 +93,10 @@ class System:
 
     @property
     def icon(self):
-        if distro.name() == "Arch Linux ARM":
+        if distro.id() == 'archlinux-arm':
             return "images/arch.png"
+        if distro.id() == "manjaro-arm":
+            return "images/manjaro.png"
         return "images/raspberry-pi.png"
 
 
