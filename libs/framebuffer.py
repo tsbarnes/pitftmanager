@@ -131,6 +131,9 @@ class Framebuffer(threading.Thread):
             self.redraw_screen()
             time.sleep(0.1)
 
+    def stop(self):
+        self.shutdown.set()
+
     def blank(self):
         self.image = Image.new("RGBA", self.size)
         self.dirty = True

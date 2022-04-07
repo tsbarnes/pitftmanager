@@ -70,20 +70,25 @@ class Calendar(threading.Thread):
         super().__init__()
         self.timezone = pytz.timezone(TIMEZONE)
         self.name = "Calendar"
+        self.shutdown = threading.Event()
 
     def run(self):
         thread_process = threading.Thread(target=self.calendar_loop)
         # run thread as a daemon so it gets cleaned up on exit.
         thread_process.daemon = True
         thread_process.start()
+        self.shutdown.wait()
 
     def calendar_loop(self):
-        while True:
+        while not self.shutdown.is_set():
             self.refresh_interval -= 1
             time.sleep(1)
             if self.refresh_interval < 1:
                 self.get_latest_events()
                 self.refresh_interval = CALENDAR_REFRESH
+
+    def stop(self):
+        self.shutdown.set()
 
     def standardize_date(self, arg):
         """

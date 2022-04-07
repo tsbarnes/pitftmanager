@@ -37,15 +37,17 @@ class Weather(threading.Thread):
     def __init__(self):
         super().__init__()
         self.name = "Weather"
+        self.shutdown = threading.Event()
 
     def run(self) -> None:
         thread_process = threading.Thread(target=self.weather_loop)
         # run thread as a daemon so it gets cleaned up on exit.
         thread_process.daemon = True
         thread_process.start()
+        self.shutdown.wait()
 
     def weather_loop(self):
-        while True:
+        while not self.shutdown.is_set():
             self.refresh_interval -= 1
             time.sleep(1)
             if self.refresh_interval < 1:
@@ -54,6 +56,9 @@ class Weather(threading.Thread):
                 except xml.parsers.expat.ExpatError as error:
                     logger.warning(error)
                 self.refresh_interval = WEATHER_REFRESH
+
+    def stop(self):
+        self.shutdown.set()
 
     async def update(self):
         """

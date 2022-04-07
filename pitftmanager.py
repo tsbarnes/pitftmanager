@@ -69,9 +69,12 @@ class PiTFTManager:
 
     def quit(self, *args):
         logger.info("PiTFT Manager quitting gracefully...")
+        self.calendar.stop()
         self.calendar.join()
+        self.weather.stop()
         self.weather.join()
         self.framebuffer.blank()
+        self.framebuffer.stop()
         self.framebuffer.join()
         exit(0)
 
