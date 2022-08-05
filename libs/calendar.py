@@ -1,7 +1,7 @@
 import time
 import logging
 import threading
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 import caldav
 import httplib2.error
@@ -12,7 +12,6 @@ import urllib3.exceptions
 from icalevents.icalevents import events
 from requests.exceptions import SSLError
 
-import settings
 from settings import TIMEZONE
 
 
@@ -26,7 +25,10 @@ try:
 except ImportError:
     CALENDAR_REFRESH = 900
 
-timezone = pytz.timezone(TIMEZONE)
+if TIMEZONE is None:
+    local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
+
+local_timezone = pytz.timezone(TIMEZONE)
 logger = logging.getLogger('pitftmanager.libs.calendar')
 
 
@@ -38,20 +40,20 @@ def sort_by_date(obj: dict):
     """
     if obj.get("start"):
         if isinstance(obj["start"], date) and not isinstance(obj["start"], datetime):
-            return datetime.combine(obj["start"], datetime.min.time(), timezone)
+            return datetime.combine(obj["start"], datetime.min.time(), local_timezone)
         if not obj["start"].tzinfo:
-            return timezone.localize(obj["start"])
+            return local_timezone.localize(obj["start"])
         return obj["start"]
     elif obj.get("due"):
         if not obj["due"]:
             return datetime.fromisocalendar(4000, 1, 1)
         if isinstance(obj["due"], date) and not isinstance(obj["due"], datetime):
-            return datetime.combine(obj["due"], datetime.min.time(), timezone)
+            return datetime.combine(obj["due"], datetime.min.time(), local_timezone)
         if not obj["due"].tzinfo:
-            return timezone.localize(obj["due"])
+            return local_timezone.localize(obj["due"])
         return obj["due"]
     else:
-        return timezone.localize(datetime.max)
+        return local_timezone.localize(datetime.max)
 
 
 class Calendar(threading.Thread):
@@ -69,7 +71,7 @@ class Calendar(threading.Thread):
         Initialize the timezone
         """
         super().__init__()
-        self.timezone = pytz.timezone(TIMEZONE)
+        self.timezone = local_timezone
         self.name = "Calendar"
         self.shutdown = threading.Event()
 

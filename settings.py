@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 from apps import get_apps
 
 try:
@@ -35,7 +34,7 @@ except ImportError:
 try:
     from local_settings import TIMEZONE
 except ImportError:
-    TIMEZONE = datetime.now().astimezone().tzname
+    TIMEZONE = None
 
 try:
     from local_settings import BACKGROUND
