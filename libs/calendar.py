@@ -32,30 +32,6 @@ local_timezone = pytz.timezone(TIMEZONE)
 logger = logging.getLogger('pitftmanager.libs.calendar')
 
 
-def sort_by_date(obj: dict):
-    """
-    Sort the events or tasks by date
-    :param obj: dict containing summary and start/due date
-    :return: the same object, with time added if needed
-    """
-    if obj.get("start"):
-        if isinstance(obj["start"], date) and not isinstance(obj["start"], datetime):
-            return datetime.combine(obj["start"], datetime.min.time(), local_timezone)
-        if not obj["start"].tzinfo:
-            return local_timezone.localize(obj["start"])
-        return obj["start"]
-    elif obj.get("due"):
-        if not obj["due"]:
-            return datetime.fromisocalendar(4000, 1, 1)
-        if isinstance(obj["due"], date) and not isinstance(obj["due"], datetime):
-            return datetime.combine(obj["due"], datetime.min.time(), local_timezone)
-        if not obj["due"].tzinfo:
-            return local_timezone.localize(obj["due"])
-        return obj["due"]
-    else:
-        return local_timezone.localize(datetime.max)
-
-
 class Calendar(threading.Thread):
     """
     This class handles the calendar events and tasks
@@ -65,6 +41,29 @@ class Calendar(threading.Thread):
     events: list = []
     tasks: list = []
     thread_lock: threading.Lock = threading.Lock()
+
+    def sort_by_date(obj: dict):
+        """
+        Sort the events or tasks by date
+        :param obj: dict containing summary and start/due date
+        :return: the same object, with time added if needed
+        """
+        if obj.get("start"):
+            if isinstance(obj["start"], date) and not isinstance(obj["start"], datetime):
+                return datetime.combine(obj["start"], datetime.min.time(), local_timezone)
+            if not obj["start"].tzinfo:
+                return local_timezone.localize(obj["start"])
+            return obj["start"]
+        elif obj.get("due"):
+            if not obj["due"]:
+                return datetime.fromisocalendar(4000, 1, 1)
+            if isinstance(obj["due"], date) and not isinstance(obj["due"], datetime):
+                return datetime.combine(obj["due"], datetime.min.time(), local_timezone)
+            if not obj["due"].tzinfo:
+                return local_timezone.localize(obj["due"])
+            return obj["due"]
+        else:
+            return local_timezone.localize(datetime.max)
 
     def __init__(self):
         """
@@ -223,8 +222,8 @@ class Calendar(threading.Thread):
             else:
                 logger.error("calendar type not recognized: {0}".format(str(connection["type"])))
 
-        new_events.sort(key=sort_by_date)
-        new_tasks.sort(key=sort_by_date)
+        new_events.sort(key=Calendar.sort_by_date)
+        new_tasks.sort(key=Calendar.sort_by_date)
 
         logger.debug("done!")
 
